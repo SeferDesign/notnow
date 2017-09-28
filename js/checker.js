@@ -5,6 +5,10 @@ var blockItems = [
     blockEndTime: 1506619621000 // past
   },
   {
+    domain: 'espn.com',
+    blockType: 'always'
+  },
+  {
     domain: 'rsefer.com',
     blockType: 'regular',
     blockTimeCriteria: [
@@ -19,11 +23,21 @@ var blockItems = [
         dayOfWeek: 4, // thursday
         blockStartHour: 11,
         blockStartMinute: 30,
-        blockEndHour: 16,
+        blockEndHour: 22,
         blockEndMinute: 40
       }
     ]
   }
+];
+
+var weekdayNames = [
+  'Sunday',
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday'
 ];
 
 function extractHostname(url) {
@@ -44,8 +58,9 @@ function testIfBlockIsActive(url) {
     if (result.blockItems) {
       var blockItems = result.blockItems;
       for (var i = 0; i < blockItems.length; i++) {
-        if (isActiveDomain(blockItems[i], url) && isCurrentlyBlocked(blockItems[i])) {
-          displayModal();
+        var isCurrentlyBlockedReturn = isCurrentlyBlocked(blockItems[i]);
+        if (isActiveDomain(blockItems[i], url) && isCurrentlyBlockedReturn) {
+          displayModal(isCurrentlyBlockedReturn);
           break;
         }
       }
@@ -54,7 +69,13 @@ function testIfBlockIsActive(url) {
 }
 
 function isCurrentlyBlocked(item) {
-  if (item.blockType == 'single') {
+  if (item.blockType == 'always') {
+    return {
+      blocked: true,
+      blockType: 'always',
+      domain: item.domain
+    };
+  } else if (item.blockType == 'single') {
     if (Math.floor(Date.now()) <= item.blockEndTime) {
       return true;
     }
@@ -66,7 +87,12 @@ function isCurrentlyBlocked(item) {
         var dateStart = new Date(now.getFullYear(), now.getMonth(), now.getDate(), c.blockStartHour, c.blockStartMinute, 0, 0);
         var dateEnd = new Date(now.getFullYear(), now.getMonth(), now.getDate(), c.blockEndHour, c.blockEndMinute, 0, 0);
         if (dateStart <= now && dateEnd > now) {
-          return true;
+          return {
+            blocked: true,
+            blockType: 'regular',
+            domain: item.domain,
+            criteria: c
+          };
         }
       }
     }
@@ -82,10 +108,22 @@ function isActiveDomain(blockItem, url) {
   }
 }
 
-function displayModal() {
-  var div  = document.createElement('div');
+function hourMinuteToLabel(hour, minute) {
+  var amPM = 'am';
+  if (hour > 12) {
+    hour = hour - 12;
+    amPM = 'pm';
+  }
+  if (hour === 0) {
+    hour = 12;
+  }
+  return hour + ':' + minute + amPM;
+}
+
+function displayModal(criteria) {
+  var div = document.createElement('div');
   var xhttp = new XMLHttpRequest();
-  xhttp.open('GET', chrome.extension.getURL('../html/blocked.html'), true);
+  xhttp.open('GET', chrome.extension.getURL('../pages/blocked.html'), true);
   xhttp.onreadystatechange = function() {
     if (xhttp.readyState == XMLHttpRequest.DONE && xhttp.status == 200) {
       var style = document.createElement('link');
@@ -103,6 +141,20 @@ function displayModal() {
       document.body.className = '';
       document.body.innerHTML = '';
 
+      var blockedCriteriaEl = document.getElementById('not-now-blocked-criteria-message');
+
+      var criteriaMessage = criteria.domain + ' is blocked';
+      var now = new Date();
+      if (criteria.blockType == 'regular') {
+        var timeStart = hourMinuteToLabel(criteria.criteria.blockStartHour, criteria.criteria.blockStartMinute);
+        var timeEnd = hourMinuteToLabel(criteria.criteria.blockEndHour, criteria.criteria.blockEndMinute);
+        criteriaMessage += ' every ' + weekdayNames[now.getDay()] + ' from ' + timeStart + ' to ' + timeEnd + '.';
+      } else if (criteria.blockType == 'always') {
+        criteriaMessage += ' at all times.';
+      }
+      blockedCriteriaEl.innerHTML = criteriaMessage;
+      console.log(criteria);
+
       var settingsButton = document.getElementById('not-now-settings-button');
       settingsButton.addEventListener('click', function() {
         chrome.runtime.sendMessage({ type: 'settings' });
@@ -113,5 +165,8 @@ function displayModal() {
 }
 
 window.onload = function() {
+
+  //chrome.storage.sync.set({ blockItems: blockItems }, function(result) {});
+
   testIfBlockIsActive(window.location.href);
 };

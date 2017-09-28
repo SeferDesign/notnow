@@ -3,6 +3,7 @@
   "name": "Not Now",
   "version": "1.0",
   "description": "This extension allows the user to block web pages from loading in specific circumstances.",
+  "options_page": "pages/settings.html",
   "browser_action": {
     "default_icon": "img/icon.png",
     "default_title": "Not Now"
@@ -27,7 +28,7 @@
   "web_accessible_resources": [
     "css/*",
     "js/*",
-    "html/*",
+    "pages/*",
     "img/*"
   ],
   "permissions": [
