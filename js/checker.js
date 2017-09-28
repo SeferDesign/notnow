@@ -102,6 +102,11 @@ function displayModal() {
       document.head.innerHTML = '';
       document.body.className = '';
       document.body.innerHTML = '';
+
+      var settingsButton = document.getElementById('not-now-settings-button');
+      settingsButton.addEventListener('click', function() {
+        chrome.runtime.sendMessage({ type: 'settings' });
+      });
     }
   };
   xhttp.send();
