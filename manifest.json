@@ -1,0 +1,31 @@
+{
+  "manifest_version": 2,
+  "name": "Not Now",
+  "version": "1.0",
+  "description": "This extension allows the user to block web pages from loading in specific circumstances.",
+  "browser_action": {
+    "default_icon": "img/icon.png",
+    "default_title": "Not Now"
+  },
+  "content_scripts": [{
+    "css": [],
+    "js": [
+      "js/checker.js"
+    ],
+    "matches": [
+      "http://*/*",
+      "https://*/*"
+    ],
+    "run_at": "document_end"
+  }],
+  "web_accessible_resources": [
+    "css/*",
+    "js/*",
+    "html/*",
+    "img/*"
+  ],
+  "permissions": [
+    "activeTab",
+    "storage"
+  ]
+}
