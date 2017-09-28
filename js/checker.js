@@ -39,13 +39,18 @@ function extractHostname(url) {
   return hostname;
 }
 
-function blockIsActive(url) {
-  for (var i = 0; i < blockItems.length; i++) {
-    if (isActiveDomain(blockItems[i], url) && isCurrentlyBlocked(blockItems[i])) {
-      return true;
+function testIfBlockIsActive(url) {
+  chrome.storage.sync.get('blockItems', function(result) {
+    if (result.blockItems) {
+      var blockItems = result.blockItems;
+      for (var i = 0; i < blockItems.length; i++) {
+        if (isActiveDomain(blockItems[i], url) && isCurrentlyBlocked(blockItems[i])) {
+          displayModal();
+          break;
+        }
+      }
     }
-  }
-  return false;
+  });
 }
 
 function isCurrentlyBlocked(item) {
@@ -77,31 +82,31 @@ function isActiveDomain(blockItem, url) {
   }
 }
 
+function displayModal() {
+  var div  = document.createElement('div');
+  var xhttp = new XMLHttpRequest();
+  xhttp.open('GET', chrome.extension.getURL('../html/blocked.html'), true);
+  xhttp.onreadystatechange = function() {
+    if (xhttp.readyState == XMLHttpRequest.DONE && xhttp.status == 200) {
+      var style = document.createElement('link');
+      style.rel = 'stylesheet';
+      style.type = 'text/css';
+      style.href = chrome.extension.getURL('../css/style.css');
+      document.documentElement.appendChild(style);
+
+      div.innerHTML = xhttp.responseText;
+      document.documentElement.appendChild(div);
+      var img = document.getElementsByClassName('not-now-image');
+      img[0].src = chrome.extension.getURL('../img/sanders-no.gif');
+
+      document.head.innerHTML = '';
+      document.body.className = '';
+      document.body.innerHTML = '';
+    }
+  };
+  xhttp.send();
+}
+
 window.onload = function() {
-  if (blockIsActive(window.location.href)) {
-
-    var div  = document.createElement('div');
-    var xhttp = new XMLHttpRequest();
-  	xhttp.open('GET', chrome.extension.getURL('../html/blocked.html'), true);
-  	xhttp.onreadystatechange = function() {
-      if (xhttp.readyState == XMLHttpRequest.DONE && xhttp.status == 200) {
-        var style = document.createElement('link');
-        style.rel = 'stylesheet';
-        style.type = 'text/css';
-        style.href = chrome.extension.getURL('../css/style.css');
-        document.documentElement.appendChild(style);
-
-        div.innerHTML = xhttp.responseText;
-  			document.documentElement.appendChild(div);
-        var img = document.getElementsByClassName('not-now-image');
-        img[0].src = chrome.extension.getURL('../img/sanders-no.gif');
-
-  			document.head.innerHTML = '';
-  			document.body.className = '';
-  			document.body.innerHTML = '';
-  		}
-  	};
-  	xhttp.send();
-
-  }
+  testIfBlockIsActive(window.location.href);
 };
