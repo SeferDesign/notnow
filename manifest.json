@@ -6,7 +6,8 @@
   "options_page": "pages/settings.html",
   "browser_action": {
     "default_icon": "img/icon.png",
-    "default_title": "Not Now"
+    "default_title": "Not Now",
+    "default_popup": "pages/popup.html"
   },
   "background": {
     "persistent": false,
@@ -17,6 +18,7 @@
   "content_scripts": [{
     "css": [],
     "js": [
+      "js/common.js",
       "js/checker.js"
     ],
     "matches": [

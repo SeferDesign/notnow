@@ -4,6 +4,8 @@
   --grey: #ddd;
   --green: #28d199;
   --green-dark: #1c956d;
+  --red: #d1285b;
+  --red-dark: #9f1d44;
 }
 
 html {
@@ -88,8 +90,7 @@ html {
   font-size: 2rem;
 }
 
-.not-now-button,
-.not-now-button:visited {
+.not-now-button {
   display: inline-block;
   padding: 0.75em 1em;
   color: var(--white);
@@ -103,7 +104,7 @@ html {
   transition: background 250ms;
 }
 
-.not-now-settings-button {
+.not-now-modal .not-now-settings-button {
   margin-top: 1.5rem;
 }
 
@@ -115,7 +116,6 @@ html {
 .not-now-button:hover,
 .not-now-button:active,
 .not-now-button:focus {
-  color: var(--white);
   background: var(--green-dark);
   text-decoration: none;
   cursor: pointer;
@@ -123,6 +123,61 @@ html {
 
 .not-now-button:active {
   box-shadow: inset 0px 0.25em 0.375em rgba(0, 0, 0, 0.125);
+}
+
+.not-now-button.alt {
+  background: var(--red);
+}
+
+.not-now-button.alt:hover,
+.not-now-button.alt:active,
+.not-now-button.alt:focus {
+  background: var(--red-dark);
+}
+
+.not-now-block-items:before {
+  content: ' ';
+  display: block;
+  clear: both;
+}
+
+.not-now-block-item-buttons {
+  float: right;
+}
+
+.not-now-block-item-buttons .not-now-button {
+  font-size: 0.625rem;
+}
+
+.not-now-block-item-buttons .not-now-button:not(:last-child) {
+  margin-right: 0.25rem;
+}
+
+.not-now-popup-html body {
+  margin: 0.25rem;
+}
+
+.not-now-popup {
+  width: 10rem;
+}
+
+.not-now-popup .not-now-button {
+  display: block;
+}
+
+.not-now-popup .not-now-button:not(:last-child) {
+  margin-bottom: 0.25rem;
+}
+
+.not-now-copyright {
+  font-size: 0.75rem;
+  text-align: center;
+}
+
+.not-now-copyright a,
+.not-now-copyright a:visited {
+  color: var(--black);
+  outline: none;
 }
 
 @media screen and (max-width: 767px) {

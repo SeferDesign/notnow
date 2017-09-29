@@ -1,14 +1,17 @@
 var blockItems = [
   {
+    id: 1,
     domain: 'facebook.com',
     blockType: 'single',
     blockEndTime: 1506619621000 // past
   },
   {
+    id: 2,
     domain: 'espn.com',
     blockType: 'always'
   },
   {
+    id: 3,
     domain: 'rsefer.com',
     blockType: 'regular',
     blockTimeCriteria: [
@@ -29,29 +32,6 @@ var blockItems = [
     ]
   }
 ];
-
-var weekdayNames = [
-  'Sunday',
-  'Monday',
-  'Tuesday',
-  'Wednesday',
-  'Thursday',
-  'Friday',
-  'Saturday'
-];
-
-function extractHostname(url) {
-  var hostname;
-  if (url.indexOf('://') > -1) {
-    hostname = url.split('/')[2];
-  } else {
-    hostname = url.split('/')[0];
-  }
-  hostname = hostname.split(':')[0];
-  hostname = hostname.split('?')[0];
-  hostname = hostname.replace('www.', '');
-  return hostname;
-}
 
 function testIfBlockIsActive(url) {
   chrome.storage.sync.get('blockItems', function(result) {
@@ -106,18 +86,6 @@ function isActiveDomain(blockItem, url) {
   } else {
     return false;
   }
-}
-
-function hourMinuteToLabel(hour, minute) {
-  var amPM = 'am';
-  if (hour > 12) {
-    hour = hour - 12;
-    amPM = 'pm';
-  }
-  if (hour === 0) {
-    hour = 12;
-  }
-  return hour + ':' + minute + amPM;
 }
 
 function displayModal(criteria) {
