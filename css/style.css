@@ -141,8 +141,41 @@ html {
   clear: both;
 }
 
+.not-now-block-items .form-wrap {
+  display: block;
+}
+
+.not-now-block-items .form-wrap .block-type-label-inner,
+.not-now-block-items .form-wrap select {
+  display: inline-block;
+  vertical-align: middle;
+  width: 50%;
+}
+
 .not-now-block-item-buttons {
   float: right;
+}
+
+.not-now-block-item-buttons .not-now-button-save {
+  display: none;
+}
+
+.not-now-block-item .form-wrap {
+  display: none;
+}
+
+.editing.not-now-block-item .form-wrap {
+  display: block;
+}
+
+.editing .not-now-block-item-buttons .not-now-button-save {
+  display: inline-block;
+}
+
+.editing.not-now-block-item .not-now-block-item-type,
+.editing .not-now-block-item-buttons .not-now-button-edit,
+.editing .not-now-block-item-buttons .not-now-button-delete {
+  display: none;
 }
 
 .not-now-block-item-buttons .not-now-button {
