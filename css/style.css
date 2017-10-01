@@ -175,6 +175,10 @@ html {
   border: 1px solid var(--grey);
 }
 
+.editing.not-now-block-item .not-now-block-item-domain.missing {
+  border-color:  var(--red);
+}
+
 .editing.not-now-block-item .form-wrap {
   display: block;
 }
@@ -219,6 +223,8 @@ html {
   text-align: center;
 }
 
+.not-now-settings p a,
+.not-now-settings p a:visited,
 .not-now-copyright a,
 .not-now-copyright a:visited {
   color: var(--black);

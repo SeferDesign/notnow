@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function() {
         blockItemContent += '<div class="not-now-block-item-buttons">';
         blockItemContent += '<button type="submit" class="not-now-button not-now-button-save" title="Save">Save</button><button class="not-now-button not-now-button-edit" title="Edit">Edit</button>';
         blockItemContent += '<button class="not-now-button alt not-now-button-delete" title="Delete">&times;</button></div>';
-        blockItemContent += '<input type="text" class="not-now-block-item-domain" value="' + blockItems[i].domain + '" disabled="true" placeholder="site.com">';
+        blockItemContent += '<input type="text" class="not-now-block-item-domain" value="' + blockItems[i].domain + '" disabled="true" required="required" placeholder="site.com">';
         blockItemContent += '<div class="not-now-block-item-type">' + blockItems[i].blockType + '</div>';
         if (blockItems[i].blockType == 'single') {
           blockItemContent += '<div>until ' + formatAMPM(new Date(blockItems[i].blockEndTime)) + '</div>';
@@ -57,9 +57,10 @@ document.addEventListener('DOMContentLoaded', function() {
           blockItemsNew = blockItemsG.filter(function(el) {
             return el.id !== editID;
           });
+          var newHost = extractHostname(form.getElementsByClassName('not-now-block-item-domain')[0].value);
           var updatedBlockItem = {
             id: editID,
-            domain: extractHostname(form.getElementsByClassName('not-now-block-item-domain')[0].value)
+            domain: newHost
           };
           var typeSelection = form.getElementsByClassName('block-type-select')[0];
           var newTypeRaw = typeSelection.options[typeSelection.selectedIndex].value;
@@ -86,8 +87,13 @@ document.addEventListener('DOMContentLoaded', function() {
           //
 
           blockItemsNew.push(updatedBlockItem);
-          chrome.storage.sync.set({ blockItems: blockItemsNew }, function() {});
-          location.reload();
+          if (newHost.length > 0) {
+            chrome.storage.sync.set({ blockItems: blockItemsNew }, function() {});
+            location.reload();
+          } else {
+            form.getElementsByClassName('not-now-block-item-domain')[0].className += ' missing';
+          }
+
         });
         form.getElementsByClassName('not-now-button-delete')[0].addEventListener('click', function() {
           var deleteID = parseInt(this.parentElement.parentElement.dataset.itemId);
