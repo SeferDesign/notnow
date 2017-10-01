@@ -57,7 +57,12 @@ function isCurrentlyBlocked(item) {
     };
   } else if (item.blockType == 'single') {
     if (Math.floor(Date.now()) <= item.blockEndTime) {
-      return true;
+      return {
+        blocked: true,
+        blockType: 'single',
+        blockEndTime: item.blockEndTime,
+        domain: item.domain
+      };
     }
   } else { // 'regular'
     for (var i = 0; i < item.blockTimeCriteria.length; i++) {
@@ -117,6 +122,8 @@ function displayModal(criteria) {
         var timeStart = hourMinuteToLabel(criteria.criteria.blockStartHour, criteria.criteria.blockStartMinute);
         var timeEnd = hourMinuteToLabel(criteria.criteria.blockEndHour, criteria.criteria.blockEndMinute);
         criteriaMessage += ' every ' + weekdayNames[now.getDay()] + ' from ' + timeStart + ' to ' + timeEnd + '.';
+      } else if (criteria.blockType == 'single') {
+        criteriaMessage += ' until ' + formatAMPM(new Date(criteria.blockEndTime)) + '.';
       } else if (criteria.blockType == 'always') {
         criteriaMessage += ' at all times.';
       }

@@ -56,9 +56,12 @@ html {
 
 .not-now-block-item-domain {
   display: inline-block;
+  position: relative;
   margin-bottom: 0.25rem;
   padding-bottom: 0.125rem;
-  border-bottom: 1px solid var(--grey);
+  width: auto;
+  color: var(--black);
+  border: 0px;
   font-size: 2rem;
 }
 
@@ -95,6 +98,8 @@ html {
   padding: 0.75em 1em;
   color: var(--white);
   background: var(--green);
+  border: 0px;
+  outline: 0px;
   text-align: center;
   text-transform: uppercase;
   text-decoration: none;
@@ -164,6 +169,12 @@ html {
   display: none;
 }
 
+.editing.not-now-block-item .not-now-block-item-domain {
+  padding: 0.125rem 0.25rem;
+  min-width: 250px;
+  border: 1px solid var(--grey);
+}
+
 .editing.not-now-block-item .form-wrap {
   display: block;
 }
@@ -196,6 +207,7 @@ html {
 
 .not-now-popup .not-now-button {
   display: block;
+  width: 100%;
 }
 
 .not-now-popup .not-now-button:not(:last-child) {
