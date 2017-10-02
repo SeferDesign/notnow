@@ -9,6 +9,8 @@ function testIfBlockIsActive(url) {
           break;
         }
       }
+    } else {
+      chrome.storage.sync.set({ blockItems: [] }, function() {});
     }
   });
 }
