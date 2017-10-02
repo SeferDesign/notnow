@@ -1,38 +1,3 @@
-var blockItems = [
-  {
-    id: 1,
-    domain: 'facebook.com',
-    blockType: 'single',
-    blockEndTime: 1506619621000 // past
-  },
-  {
-    id: 2,
-    domain: 'espn.com',
-    blockType: 'always'
-  },
-  {
-    id: 3,
-    domain: 'rsefer.com',
-    blockType: 'regular',
-    blockTimeCriteria: [
-      {
-        dayOfWeek: 0, // sunday
-        blockStartHour: 0,
-        blockStartMinute: 0,
-        blockEndHour: 10,
-        blockEndMinute: 0
-      },
-      {
-        dayOfWeek: 4, // thursday
-        blockStartHour: 11,
-        blockStartMinute: 30,
-        blockEndHour: 22,
-        blockEndMinute: 40
-      }
-    ]
-  }
-];
-
 function testIfBlockIsActive(url) {
   chrome.storage.sync.get('blockItems', function(result) {
     if (result.blockItems) {
@@ -120,9 +85,13 @@ function displayModal(criteria) {
       var criteriaMessage = criteria.domain + ' is blocked';
       var now = new Date();
       if (criteria.blockType == 'regular') {
-        var timeStart = hourMinuteToLabel(criteria.criteria.blockStartHour, criteria.criteria.blockStartMinute);
-        var timeEnd = hourMinuteToLabel(criteria.criteria.blockEndHour, criteria.criteria.blockEndMinute);
-        criteriaMessage += ' every ' + weekdayNames[now.getDay()] + ' from ' + timeStart + ' to ' + timeEnd + '.';
+        if (criteria.criteria.blockStartHour === 0 && criteria.criteria.blockStartMinute === 0 && criteria.criteria.blockEndHour == 23 && criteria.criteria.blockEndMinute == 59) {
+          criteriaMessage += ' all day every ' + weekdayNames[now.getDay()] + '.';
+        } else {
+          var timeStart = hourMinuteToLabel(criteria.criteria.blockStartHour, criteria.criteria.blockStartMinute);
+          var timeEnd = hourMinuteToLabel(criteria.criteria.blockEndHour, criteria.criteria.blockEndMinute);
+          criteriaMessage += ' every ' + weekdayNames[now.getDay()] + ' from ' + timeStart + ' to ' + timeEnd + '.';
+        }
       } else if (criteria.blockType == 'single') {
         criteriaMessage += ' until ' + formatAMPM(new Date(criteria.blockEndTime)) + '.';
       } else if (criteria.blockType == 'always') {

@@ -52,6 +52,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         blockItemContent += blockItemFormMarkup(blockItems[i].blockType, existingCriteria);
         form.innerHTML = blockItemContent;
+        if (blockItems[i].blockType == 'regular') {
+          form.className += ' schedule-active';
+        }
         var allDayChecks = form.getElementsByClassName('all-day-check');
         for (var c = 0; c < allDayChecks.length; c++) {
           allDayChecks[c].addEventListener('click', function() {
@@ -66,6 +69,8 @@ document.addEventListener('DOMContentLoaded', function() {
           });
         }
         blockItemsWrap.appendChild(form);
+        setTypeSelect(form);
+        setShortcutButtons(form);
         form.getElementsByClassName('not-now-button-edit')[0].addEventListener('click', function(e) {
           e.preventDefault();
           document.getElementsByClassName('new-block-item-form-wrap')[0].innerHTML = '';
@@ -88,6 +93,76 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 });
+
+function setTypeSelect(form) {
+  form.getElementsByClassName('block-type-select')[0].addEventListener('change', function() {
+    if (this.value != 'regular') {
+      form.classList.remove('schedule-active');
+    } else {
+      form.className += ' schedule-active';
+    }
+  });
+}
+
+function setShortcutButtons(form) {
+  form.getElementsByClassName('shortcut-weekdays-9-5')[0].addEventListener('click', function(e) {
+    e.preventDefault();
+    var days = form.getElementsByClassName('schedule-day');
+    for (var d = 0; d < days.length; d++) {
+      var day = form.getElementsByClassName('schedule-day')[d];
+      day.getElementsByClassName('all-day-check')[0].checked = false;
+      var selects = day.getElementsByClassName('time');
+      for (var s = 0; s < selects.length; s++) {
+        selects[s].disabled = false;
+        selects[s].value = '';
+      }
+      if (d >= 1 && d <= 5) {
+        selects[0].value = '9:00am';
+        selects[1].value = '5:00pm';
+      }
+    }
+  });
+  form.getElementsByClassName('shortcut-weekdays')[0].addEventListener('click', function(e) {
+    e.preventDefault();
+    var days = form.getElementsByClassName('schedule-day');
+    for (var d = 0; d < days.length; d++) {
+      var day = form.getElementsByClassName('schedule-day')[d];
+      day.getElementsByClassName('all-day-check')[0].checked = false;
+      var selects = day.getElementsByClassName('time');
+      for (var s = 0; s < selects.length; s++) {
+        selects[s].disabled = false;
+        selects[s].value = '';
+      }
+      if (d >= 1 && d <= 5) {
+        day.getElementsByClassName('all-day-check')[0].checked = true;
+        selects[0].value = '';
+        selects[0].disabled = true;
+        selects[1].value = '';
+        selects[1].disabled = true;
+      }
+    }
+  });
+  form.getElementsByClassName('shortcut-weekends')[0].addEventListener('click', function(e) {
+    e.preventDefault();
+    var days = form.getElementsByClassName('schedule-day');
+    for (var d = 0; d < days.length; d++) {
+      var day = form.getElementsByClassName('schedule-day')[d];
+      day.getElementsByClassName('all-day-check')[0].checked = false;
+      var selects = day.getElementsByClassName('time');
+      for (var s = 0; s < selects.length; s++) {
+        selects[s].disabled = false;
+        selects[s].value = '';
+      }
+      if (d === 0 || d == 6) {
+        day.getElementsByClassName('all-day-check')[0].checked = true;
+        selects[0].value = '';
+        selects[0].disabled = true;
+        selects[1].value = '';
+        selects[1].disabled = true;
+      }
+    }
+  });
+}
 
 function setSaveButton(form, button) {
   button.addEventListener('click', function(e) {
@@ -145,7 +220,7 @@ function setSaveButton(form, button) {
 
 function displayNewBlockItemForm(domain) {
   var newFormWrap = document.getElementById('new-block-item-form-wrap');
-  var content = '<form class="not-now-block-item editing">';
+  var content = '<form class="not-now-block-item editing schedule-active">';
   content += '<h3>Block New Site</h3>';
   content += '<div class="not-now-block-item-buttons"><button type="submit" class="not-now-button not-now-button-save" title="Save">Save</button></div>';
   content += '<input type="text" class="not-now-block-item-domain" value="' + domain + '" required="required" placeholder="site.com"';
@@ -169,7 +244,10 @@ function displayNewBlockItemForm(domain) {
       }
     });
   }
-  setSaveButton(newFormWrap.getElementsByClassName('not-now-block-item')[0], newFormWrap.getElementsByClassName('not-now-button-save')[0]);
+  var form = newFormWrap.getElementsByClassName('not-now-block-item')[0];
+  setTypeSelect(form);
+  setShortcutButtons(form);
+  setSaveButton(form, newFormWrap.getElementsByClassName('not-now-button-save')[0]);
 }
 
 function blockItemFormMarkup(existingBlockType, existingCriteria) {
@@ -193,7 +271,7 @@ function blockItemFormMarkup(existingBlockType, existingCriteria) {
   content += '</select>';
   content += '</label>';
   content += '<div class="schedule-wrap">';
-    content += '<div class="schedule-shortcuts"><a href="#">Weekdays 9-5</a></div>';
+    content += '<p class="schedule-shortcuts">Shortcuts: <a class="shortcut-weekdays" href="#">Weekdays</a> &bull; <a class="shortcut-weekdays-9-5" href="#">Weekdays 9-5</a> &bull; <a class="shortcut-weekends" href="#">Weekends</a></p>';
     content += '<div class="schedule">';
       content += '<div class="left-col"><div class="schedule-day-label">&nbsp;</div><div class="all-day">All Day</div><div class="start">Start</div><div class="end">End</div></div>';
       for (var s = 0; s < 7; s++) {

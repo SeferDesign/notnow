@@ -327,12 +327,18 @@ html {
   text-align: center;
 }
 
-.not-now-settings p a,
-.not-now-settings p a:visited,
-.not-now-copyright a,
-.not-now-copyright a:visited {
+p a,
+p a:visited {
   color: var(--black);
   outline: none;
+}
+
+.schedule-wrap {
+  display: none;
+}
+
+.schedule-active .schedule-wrap {
+  display: block;
 }
 
 .schedule .left-col,
@@ -360,6 +366,12 @@ html {
   display: block;
   margin: 0px auto;
   min-width: 5rem;
+}
+
+.schedule-shortcuts {
+  margin: 1rem 0px;
+  font-size: 0.875rem;
+  text-align: center;
 }
 
 @-webkit-keyframes fadein {
