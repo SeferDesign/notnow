@@ -111,6 +111,7 @@ function displayModal(criteria) {
       img[0].src = chrome.extension.getURL('../img/sanders-no.gif');
 
       document.head.innerHTML = '';
+      document.head.innerHTML = '<title>Blocked</title>';
       document.body.className = '';
       document.body.innerHTML = '';
 
@@ -128,7 +129,6 @@ function displayModal(criteria) {
         criteriaMessage += ' at all times.';
       }
       blockedCriteriaEl.innerHTML = criteriaMessage;
-      console.log(criteria);
 
       var settingsButton = document.getElementById('not-now-settings-button');
       settingsButton.addEventListener('click', function() {
@@ -140,8 +140,5 @@ function displayModal(criteria) {
 }
 
 window.onload = function() {
-
-  //chrome.storage.sync.set({ blockItems: blockItems }, function(result) {});
-
   testIfBlockIsActive(window.location.href);
 };

@@ -43,3 +43,48 @@ function hourMinuteToLabel(hour, minute) {
   }
   return hour + ':' + minute + amPM;
 }
+
+function addNewBlockItem(options, existingID) {
+  chrome.storage.sync.get('blockItems', function(result) {
+    if (result.blockItems) {
+      var now = new Date();
+      var blockItemsG = result.blockItems;
+      var blockItemsNew = result.blockItems;
+      var newID = '';
+      if (existingID) {
+        blockItemsNew = blockItemsG.filter(function(el) {
+          return el.id !== existingID;
+        });
+        newID = existingID;
+      } else {
+        newID = now.getTime();
+      }
+
+      var newBlockItem = {
+        id: newID,
+        domain: options.domain
+      };
+
+      var newTypeRaw = options.blockTypeRaw;
+      var newType = '';
+      var singleTime = '';
+      if (newTypeRaw == '30' || newTypeRaw == '60' || newTypeRaw == 'day') {
+        newBlockItem.blockType = 'single';
+        if (newTypeRaw == '30') {
+          singleTime = now.getTime() + (0.5 * 3600 * 1000);
+        } else if (newTypeRaw == '60') {
+          singleTime = now.getTime() + (1.0 * 3600 * 1000);
+        } else if (newTypeRaw == 'day') {
+          var tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0);
+          singleTime = tomorrow.getTime();
+        }
+        newBlockItem.blockEndTime = singleTime;
+      } else if (newTypeRaw == 'always') {
+        newBlockItem.blockType = 'always';
+      }
+      blockItemsNew.push(newBlockItem);
+      chrome.storage.sync.set({ blockItems: blockItemsNew }, function() {});
+    }
+  });
+
+}

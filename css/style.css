@@ -224,8 +224,9 @@ html {
 }
 
 .not-now-popup .add-this-site-label {
-  font-size: 1.5rem;
   margin-bottom: 0.5rem;
+  font-size: 1.5rem;
+  word-wrap: break-word;
 }
 
 .not-now-popup .not-now-button {

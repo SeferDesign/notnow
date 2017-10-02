@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (result.blockItems) {
       console.log(result.blockItems);
       var blockItems = result.blockItems;
-      blockItemsG = result.blockItems;
+      var blockItemsG = result.blockItems;
       var blockItemsWrap = document.getElementById('not-now-block-items');
       for (var i = 0; i < blockItems.length; i++) {
         let form = document.createElement('form');
@@ -52,48 +52,17 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         form.getElementsByClassName('not-now-button-save')[0].addEventListener('click', function(e) {
           e.preventDefault();
-          var now = new Date();
-          var editID = parseInt(form.dataset.itemId);
-          blockItemsNew = blockItemsG.filter(function(el) {
-            return el.id !== editID;
-          });
           var newHost = extractHostname(form.getElementsByClassName('not-now-block-item-domain')[0].value);
-          var updatedBlockItem = {
-            id: editID,
-            domain: newHost
-          };
           var typeSelection = form.getElementsByClassName('block-type-select')[0];
-          var newTypeRaw = typeSelection.options[typeSelection.selectedIndex].value;
-          var newType = '';
-          var singleTime = '';
-          console.log(formatAMPM(now));
-          if (newTypeRaw == '30' || newTypeRaw == '60' || newTypeRaw == 'day') {
-            updatedBlockItem.blockType = 'single';
-            if (newTypeRaw == '30') {
-              singleTime = now.getTime() + (0.5 * 3600 * 1000);
-            } else if (newTypeRaw == '60') {
-              singleTime = now.getTime() + (1.0 * 3600 * 1000);
-            } else if (newTypeRaw == 'day') {
-              var tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0);
-              singleTime = tomorrow.getTime();
-            }
-            updatedBlockItem.blockEndTime = singleTime;
-          } else if (newTypeRaw == 'always') {
-            updatedBlockItem.blockType = 'always';
-          }
-
-          console.log(updatedBlockItem);
-
-          //
-
-          blockItemsNew.push(updatedBlockItem);
           if (newHost.length > 0) {
-            chrome.storage.sync.set({ blockItems: blockItemsNew }, function() {});
+            addNewBlockItem({
+              domain: newHost,
+              blockTypeRaw: typeSelection.options[typeSelection.selectedIndex].value
+            }, parseInt(form.dataset.itemId));
             location.reload();
           } else {
             form.getElementsByClassName('not-now-block-item-domain')[0].className += ' missing';
           }
-
         });
         form.getElementsByClassName('not-now-button-delete')[0].addEventListener('click', function() {
           var deleteID = parseInt(this.parentElement.parentElement.dataset.itemId);
