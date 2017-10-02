@@ -8,6 +8,7 @@
   --green-dark: #1c956d;
   --red: #d1285b;
   --red-dark: #9f1d44;
+  --yellow: #f9eeb8;
 }
 
 html {
@@ -20,8 +21,13 @@ html {
 
 .not-now h1,
 .not-now h2,
-.not-now h3 {
+.not-now h3,
+.not-now h4 {
   margin: 0px 0px 1.5rem;
+}
+
+.not-now .block-list-title {
+  margin-bottom: 3rem;
 }
 
 .not-now-settings-html {
@@ -50,10 +56,42 @@ html {
   font-size: 1.5rem;
 }
 
+.new-block-item-form-wrap {
+  z-index: 1;
+  position: relative;
+}
+
+.new-block-item-form-wrap h3 {
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+}
+
+.new-block-item-form-wrap:after {
+  content: ' ';
+  z-index: 0;
+  position: absolute;
+  top: 0px;
+  left: -1rem;
+  right: -1rem;
+  bottom: 0px;
+  display: block;
+  background: var(--yellow);
+}
+
+.new-block-item-form-wrap .not-now-block-item {
+  z-index: 1;
+  position: relative;
+}
+
 .not-now-block-item:not(:last-child) {
   margin-bottom: 0.5rem;
   padding-bottom: 1rem;
   border-bottom: 1px solid var(--black);
+}
+
+.new-block-item-form-wrap .not-now-block-item {
+  padding: 1rem 0px;
+  margin-bottom: 0.5rem;
 }
 
 .not-now-block-item-domain {
@@ -154,6 +192,7 @@ html {
   background: var(--red-dark);
 }
 
+.new-block-item-form-wrap:before,
 .not-now-block-items:before {
   content: ' ';
   display: block;
@@ -164,8 +203,8 @@ html {
   display: block;
 }
 
-.not-now-block-items .form-wrap .block-type-label-inner,
-.not-now-block-items .form-wrap select {
+.form-wrap .block-type-label-inner,
+.form-wrap select {
   display: inline-block;
   vertical-align: middle;
   width: 50%;
@@ -226,7 +265,13 @@ html {
 .not-now-popup .add-this-site-label {
   margin-bottom: 0.5rem;
   font-size: 1.5rem;
+  line-height: 1.5rem;
   word-wrap: break-word;
+}
+
+.not-now-popup .add-this-site-label.long-domain {
+  font-size: 1rem;
+  line-height: 1.5rem;
 }
 
 .not-now-popup .not-now-button {

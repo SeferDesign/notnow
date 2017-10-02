@@ -2,7 +2,7 @@ chrome.runtime.onMessage.addListener(function(request, sender) {
   if (request.type == 'settings') {
     //chrome.runtime.openOptionsPage();
     var params = '';
-    if (request.params) {
+    if (request.params && request.params.length > 0) {
       params = request.params;
     }
     window.open(chrome.runtime.getURL('pages/settings.html') + params);
