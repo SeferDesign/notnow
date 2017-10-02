@@ -1,6 +1,13 @@
 var blockItemsG = null;
 
 document.addEventListener('DOMContentLoaded', function() {
+  chrome.storage.sync.get('pauseTime', function(result) {
+    var now = new Date();
+    if (result.pauseTime && result.pauseTime >= now.getTime()) {
+      document.getElementsByClassName('not-now-paused')[0].innerHTML = '<div class="not-now-paused-text">Paused until ' + formatAMPM(new Date(result.pauseTime)) + '.</div>';
+    }
+  });
+
   var params = getParameters();
   if (params && params.newBlock == 'true' && params.domain && params.domain.length > 0) {
     displayNewBlockItemForm(params.domain);

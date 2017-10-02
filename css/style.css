@@ -71,6 +71,15 @@ html {
   max-width: 868px;
 }
 
+.not-now-paused-text {
+  margin-top: 2rem;
+  color: var(--blue);
+  font-size: 1.25rem;
+  font-weight: bold;
+  text-align: center;
+  text-transform: uppercase;
+}
+
 .not-now-settings hr {
   margin: 2rem 0px;
   height: 1px;
@@ -178,7 +187,7 @@ html {
   transition: background 250ms;
 }
 
-.not-now-modal .not-now-settings-button {
+.not-now-modal .not-now-button {
   margin-top: 1.5rem;
 }
 

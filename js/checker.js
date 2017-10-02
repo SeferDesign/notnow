@@ -1,16 +1,19 @@
 function testIfBlockIsActive(url) {
-  chrome.storage.sync.get('blockItems', function(result) {
-    if (result.blockItems) {
-      var blockItems = result.blockItems;
-      for (var i = 0; i < blockItems.length; i++) {
-        var isCurrentlyBlockedReturn = isCurrentlyBlocked(blockItems[i]);
-        if (isActiveDomain(blockItems[i], url) && isCurrentlyBlockedReturn) {
-          displayModal(isCurrentlyBlockedReturn);
-          break;
+  chrome.storage.sync.get(null, function(result) {
+    var now = new Date();
+    if (!result.pauseTime || result.pauseTime.length < 1 || result.pauseTime < now.getTime()) {
+      if (result.blockItems) {
+        var blockItems = result.blockItems;
+        for (var i = 0; i < blockItems.length; i++) {
+          var isCurrentlyBlockedReturn = isCurrentlyBlocked(blockItems[i]);
+          if (isActiveDomain(blockItems[i], url) && isCurrentlyBlockedReturn) {
+            displayModal(isCurrentlyBlockedReturn);
+            break;
+          }
         }
+      } else {
+        chrome.storage.sync.set({ blockItems: [], pauseTime: '' }, function() {});
       }
-    } else {
-      chrome.storage.sync.set({ blockItems: [] }, function() {});
     }
   });
 }
@@ -100,6 +103,12 @@ function displayModal(criteria) {
         criteriaMessage += ' at all times.';
       }
       blockedCriteriaEl.innerHTML = criteriaMessage;
+
+      var pauseButton = document.getElementById('not-now-pause-button');
+      pauseButton.addEventListener('click', function() {
+        chrome.runtime.sendMessage({ type: 'pause' });
+        location.reload();
+      });
 
       var settingsButton = document.getElementById('not-now-settings-button');
       settingsButton.addEventListener('click', function() {
