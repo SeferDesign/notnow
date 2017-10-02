@@ -26,8 +26,32 @@ html {
   margin: 0px 0px 1.5rem;
 }
 
-.not-now .block-list-title {
-  margin-bottom: 3rem;
+.not-now h1 {
+  font-size: 2rem;
+}
+
+.not-now-list-header {
+  margin: 2rem 0px;
+  padding: 1rem 0px;
+  border: 1px solid var(--grey);
+  border-left: 0px;
+  border-right: 0px;
+}
+
+.not-now-list-header .block-list-title,
+.not-now-list-header .not-now-add-new-wrap {
+  display: inline-block;
+  vertical-align: middle;
+  width: 50%;
+}
+
+.not-now-list-header .block-list-title {
+  margin: 0px;
+  font-size: 1.5rem;
+}
+
+.not-now-list-header .not-now-add-new-wrap {
+  text-align: right;
 }
 
 .not-now-settings-html {
@@ -153,11 +177,6 @@ html {
 
 .not-now-modal .not-now-settings-button {
   margin-top: 1.5rem;
-}
-
-.not-now-add-new-button {
-  float: right;
-  margin-bottom: 1.5rem;
 }
 
 .not-now-button:hover,
