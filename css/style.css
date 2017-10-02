@@ -2,6 +2,8 @@
   --black: #000;
   --white: #fff;
   --grey: #ddd;
+  --blue: #288fd1;
+  --blue-dark: #1c6ea2;
   --green: #28d199;
   --green-dark: #1c956d;
   --red: #d1285b;
@@ -74,6 +76,8 @@ html {
   color: var(--white);
   background: var(--black);
   text-align: center;
+  -webkit-animation: fadein 500ms;
+  animation: fadein 500ms;
 }
 
 .not-now-inner {
@@ -97,7 +101,7 @@ html {
   display: inline-block;
   padding: 0.75em 1em;
   color: var(--white);
-  background: var(--green);
+  background: var(--blue);
   border: 0px;
   outline: 0px;
   text-align: center;
@@ -121,13 +125,23 @@ html {
 .not-now-button:hover,
 .not-now-button:active,
 .not-now-button:focus {
-  background: var(--green-dark);
+  background: var(--blue-dark);
   text-decoration: none;
   cursor: pointer;
 }
 
 .not-now-button:active {
   box-shadow: inset 0px 0.25em 0.375em rgba(0, 0, 0, 0.125);
+}
+
+.not-now-button.success {
+  background: var(--green);
+}
+
+.not-now-button.success:hover,
+.not-now-button.success:active,
+.not-now-button.success:focus {
+  background: var(--green-dark);
 }
 
 .not-now-button.alt {
@@ -206,7 +220,12 @@ html {
 }
 
 .not-now-popup {
-  width: 10rem;
+  width: 14rem;
+}
+
+.not-now-popup .add-this-site-label {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
 }
 
 .not-now-popup .not-now-button {
@@ -214,8 +233,28 @@ html {
   width: 100%;
 }
 
+.not-now-popup .not-now-button.not-now-button-add-30,
+.not-now-popup .not-now-button.not-now-button-add-60 {
+  display: inline-block;
+  vertical-align: top;
+  width: calc(50% - 0.125rem);
+}
+
+.not-now-popup .not-now-button.not-now-button-add-60 {
+  margin-left: 0.25rem;
+}
+
 .not-now-popup .not-now-button:not(:last-child) {
   margin-bottom: 0.25rem;
+}
+
+.not-now-popup .popup-add-this-site,
+.not-now-popup.adding .popup-default {
+  display: none;
+}
+
+.not-now-popup.adding .popup-add-this-site {
+  display: block;
 }
 
 .not-now-copyright {
@@ -229,6 +268,16 @@ html {
 .not-now-copyright a:visited {
   color: var(--black);
   outline: none;
+}
+
+@-webkit-keyframes fadein {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadein {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 @media screen and (max-width: 767px) {
