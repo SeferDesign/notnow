@@ -27,13 +27,48 @@ document.addEventListener('DOMContentLoaded', function() {
           blockItemContent += 'Always blocked';
         } else if (blockItems[i].blockType == 'single') {
           blockItemContent += 'Blocked until ' + formatAMPM(new Date(blockItems[i].blockEndTime));
+        } else if (blockItems[i].blockType == 'regular') {
+          blockItemContent += 'Blocked ';
+          if (blockItems[i].blockTimeCriteria) {
+            for (var b = 0; b < blockItems[i].blockTimeCriteria.length; b++) {
+              if (b > 0) {
+                blockItemContent += ', ';
+              }
+              if (blockItems[i].blockTimeCriteria[b].blockStartHour === 0 && blockItems[i].blockTimeCriteria[b].blockStartHour === 0 && blockItems[i].blockTimeCriteria[b].blockEndHour == 23 && blockItems[i].blockTimeCriteria[b].blockEndMinute) {
+                blockItemContent += ' all day ' + weekdayNames[blockItems[i].blockTimeCriteria[b].dayOfWeek];
+              } else {
+                blockItemContent += weekdayNames[blockItems[i].blockTimeCriteria[b].dayOfWeek] + ' ';
+                blockItemContent += hourMinuteToLabel(blockItems[i].blockTimeCriteria[b].blockStartHour, blockItems[i].blockTimeCriteria[b].blockStartMinute) + ' to ' + hourMinuteToLabel(blockItems[i].blockTimeCriteria[b].blockEndHour, blockItems[i].blockTimeCriteria[b].blockEndMinute);
+              }
+            }
+          } else {
+            blockItemContent += 'regularly';
+          }
         }
         blockItemContent += '</div>';
-        blockItemContent += blockItemFormMarkup(blockItems[i].blockType);
+        var existingCriteria = null;
+        if (blockItems[i].blockTimeCriteria) {
+          existingCriteria = blockItems[i].blockTimeCriteria;
+        }
+        blockItemContent += blockItemFormMarkup(blockItems[i].blockType, existingCriteria);
         form.innerHTML = blockItemContent;
+        var allDayChecks = form.getElementsByClassName('all-day-check');
+        for (var c = 0; c < allDayChecks.length; c++) {
+          allDayChecks[c].addEventListener('click', function() {
+            var selects = this.parentElement.parentElement.getElementsByClassName('time');
+            var newStatus = false;
+            if (this.checked) {
+              newStatus = true;
+            }
+            for (var s = 0; s < selects.length; s++) {
+              selects[s].disabled = newStatus;
+            }
+          });
+        }
         blockItemsWrap.appendChild(form);
         form.getElementsByClassName('not-now-button-edit')[0].addEventListener('click', function(e) {
           e.preventDefault();
+          document.getElementsByClassName('new-block-item-form-wrap')[0].innerHTML = '';
           var activeID = form.dataset.itemId;
           form.className += ' editing';
           form.getElementsByClassName('not-now-block-item-domain')[0].disabled = false;
@@ -60,11 +95,48 @@ function setSaveButton(form, button) {
     var newHost = extractHostname(form.getElementsByClassName('not-now-block-item-domain')[0].value);
     var typeSelection = form.getElementsByClassName('block-type-select')[0];
     if (newHost.length > 0) {
-      addNewBlockItem({
+      var object = {
         domain: newHost,
         blockTypeRaw: typeSelection.options[typeSelection.selectedIndex].value
-      }, parseInt(form.dataset.itemId));
-      window.location = window.location.pathname;
+      };
+      if (typeSelection.options[typeSelection.selectedIndex].value == 'regular') {
+        object.blockTimeCriteria = [];
+        var days = form.getElementsByClassName('schedule-day');
+        for (var d = 0; d < days.length; d++) {
+          var allDayStatus = false;
+          if (days[d].getElementsByClassName('all-day-check')[0].checked) {
+            object.blockTimeCriteria.push({
+              dayOfWeek: parseInt(days[d].dataset.dayId),
+              blockStartHour: 0,
+              blockStartMinute: 0,
+              blockEndHour: 23,
+              blockEndMinute: 59
+            });
+          } else {
+            var selects = days[d].getElementsByClassName('time');
+            var startTime = selects[0].value;
+            var endTime = selects[1].value;
+            if (startTime == endTime) {
+              // do nothing
+            } else {
+              var startSegments = hourMinuteFromTime(startTime);
+              var endSegments = hourMinuteFromTime(endTime);
+              object.blockTimeCriteria.push({
+                dayOfWeek: parseInt(days[d].dataset.dayId),
+                blockStartHour: startSegments.hour,
+                blockStartMinute: startSegments.minute,
+                blockEndHour: endSegments.hour,
+                blockEndMinute: endSegments.minute
+              });
+            }
+          }
+        }
+        addNewBlockItem(object, parseInt(form.dataset.itemId));
+        window.location = window.location.pathname;
+      } else {
+        addNewBlockItem(object, parseInt(form.dataset.itemId));
+        window.location = window.location.pathname;
+      }
     } else {
       form.getElementsByClassName('not-now-block-item-domain')[0].className += ' missing';
     }
@@ -84,10 +156,23 @@ function displayNewBlockItemForm(domain) {
   content += blockItemFormMarkup('regular');
   content += '</form>';
   newFormWrap.innerHTML = content;
+  var allDayChecks = newFormWrap.getElementsByClassName('all-day-check');
+  for (var i = 0; i < allDayChecks.length; i++) {
+    allDayChecks[i].addEventListener('click', function() {
+      var selects = this.parentElement.parentElement.getElementsByClassName('time');
+      var newStatus = false;
+      if (this.checked) {
+        newStatus = true;
+      }
+      for (var s = 0; s < selects.length; s++) {
+        selects[s].disabled = newStatus;
+      }
+    });
+  }
   setSaveButton(newFormWrap.getElementsByClassName('not-now-block-item')[0], newFormWrap.getElementsByClassName('not-now-button-save')[0]);
 }
 
-function blockItemFormMarkup(existingBlockType) {
+function blockItemFormMarkup(existingBlockType, existingCriteria) {
   var content = '';
   content += '<div class="form-wrap">';
   content += '<label for="block-type-select"><div class="block-type-label-inner">Block this site:</div>';
@@ -107,6 +192,104 @@ function blockItemFormMarkup(existingBlockType) {
     content += '</optgroup>';
   content += '</select>';
   content += '</label>';
+  content += '<div class="schedule-wrap">';
+    content += '<div class="schedule-shortcuts"><a href="#">Weekdays 9-5</a></div>';
+    content += '<div class="schedule">';
+      content += '<div class="left-col"><div class="schedule-day-label">&nbsp;</div><div class="all-day">All Day</div><div class="start">Start</div><div class="end">End</div></div>';
+      for (var s = 0; s < 7; s++) {
+        var eSH, eSM, eEH, eEM;
+        if (existingCriteria) {
+          var found = existingCriteria.find(function(x) {
+            return x.dayOfWeek === s;
+          });
+          if (found) {
+            eSH = found.blockStartHour;
+            eSM = found.blockStartMinute;
+            eEH = found.blockEndHour;
+            eEM = found.blockEndMinute;
+            content += scheduleDay(s, eSH, eSM, eEH, eEM);
+          } else {
+            content += scheduleDay(s);
+          }
+        } else {
+          content += scheduleDay(s);
+        }
+
+      }
+    content += '</div>';
   content += '</div>';
+  content += '</div>';
+  return content;
+}
+
+function scheduleDay(dayNumber, existingStartHour, existingStartMinute, existingEndHour, existingEndMinute) {
+  var content = '<div class="schedule-day" data-day-id="' + dayNumber + '">';
+    content += '<div class="schedule-day-label">' + weekdayAbbreviations[dayNumber] + '</div>';
+    var isAllDay = false;
+    if (existingStartHour === 0 && existingStartMinute === 0 && existingEndHour == 23 && existingEndMinute == 59) {
+      isAllDay = true;
+    }
+    content += '<div class="all-day"><input type="checkbox" name="all-day" class="all-day-check"';
+    if (isAllDay) {
+      content += ' checked';
+    }
+    content += '></div>';
+
+    content += '<div class="start">';
+    if (existingStartHour >= 0 && existingStartHour <= 23) {
+      content += timeSelect(formatAMPM(new Date(0, 0, 0, existingStartHour, existingStartMinute), true), isAllDay);
+    } else {
+      content += timeSelect();
+    }
+    content += '</div>';
+    content += '<div class="end">';
+    if (existingEndHour >= 0 && existingEndHour <= 23) {
+      content += timeSelect(formatAMPM(new Date(0, 0, 0, existingEndHour, existingEndMinute), true), isAllDay);
+    } else {
+      content += timeSelect();
+    }
+    content += '</div>';
+  content += '</div>';
+  return content;
+}
+
+function timeSelect(selected, isAllDay) {
+  var content = '<select name="time" class="time"';
+  if (isAllDay) {
+    content += ' disabled="disabled"';
+  }
+  content += '>';
+  content += '<option></option>';
+  for (var ap = 0; ap < 2; ap++) {
+    var ampm = 'am';
+    if (ap == 1) {
+      ampm = 'pm';
+    }
+    for (var h = 0; h < 12; h++) {
+      var displayH = h;
+      if (h === 0) {
+        displayH = '12';
+      }
+      for (var m = 0; m < 4; m++) {
+        var displayM;
+        if (m === 0) {
+          displayM = '00';
+        } else if (m == 1) {
+          displayM = '15';
+        } else if (m == 2) {
+          displayM = '30';
+        } else if (m == 3) {
+          displayM = '45';
+        }
+        var fullDisplay = displayH + ':' + displayM + ampm;
+        content += '<option';
+        if (selected && fullDisplay == selected) {
+          content += ' selected';
+        }
+        content += '>' + fullDisplay + '</option>';
+      }
+    }
+  }
+  content += '</select>';
   return content;
 }

@@ -66,7 +66,7 @@ html {
 
 .not-now-settings {
   margin: 0px auto;
-  max-width: 736px;
+  max-width: 868px;
 }
 
 .not-now-settings hr {
@@ -335,6 +335,33 @@ html {
   outline: none;
 }
 
+.schedule .left-col,
+.schedule .schedule-day {
+  display: inline-block;
+  vertical-align: top;
+  width: 13.5%;
+  text-align: center;
+  font-size: 0.75rem;
+}
+
+.schedule .left-col {
+  width: 5.5%;
+  text-align: right;
+}
+
+.schedule .all-day,
+.schedule .start,
+.schedule .end {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.schedule select {
+  display: block;
+  margin: 0px auto;
+  min-width: 5rem;
+}
+
 @-webkit-keyframes fadein {
   from { opacity: 0; }
   to { opacity: 1; }
@@ -345,7 +372,7 @@ html {
   to { opacity: 1; }
 }
 
-@media screen and (max-width: 767px) {
+@media screen and (max-width: 899px) {
 
   .not-now-settings {
     max-width: 100%;

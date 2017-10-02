@@ -8,6 +8,16 @@ var weekdayNames = [
   'Saturday'
 ];
 
+var weekdayAbbreviations = [
+  'Sun',
+  'Mon',
+  'Tue',
+  'Wed',
+  'Thu',
+  'Fri',
+  'Sat'
+];
+
 function extractHostname(url) {
   var hostname;
   if (url.indexOf('://') > -1) {
@@ -21,15 +31,35 @@ function extractHostname(url) {
   return hostname;
 }
 
-function formatAMPM(date) {
+function formatAMPM(date, removeSpace) {
   var hours = date.getHours();
   var minutes = date.getMinutes();
   var ampm = hours >= 12 ? 'pm' : 'am';
   hours = hours % 12;
   hours = hours ? hours : 12;
-  minutes = minutes < 10 ? '0'+minutes : minutes;
-  var strTime = hours + ':' + minutes + ' ' + ampm;
+  minutes = minutes < 10 ? '0' + minutes : minutes;
+  var strTime = hours + ':' + minutes;
+  if (!removeSpace) {
+    strTime += ' ';
+  }
+  strTime += ampm;
   return strTime;
+}
+
+function hourMinuteFromTime(time) {
+  var segments = time.match(/(\d+)(?::(\d\d))?\s*(p?)/);
+  var hour = segments[1];
+  if (segments[3].length < 1 || segments[3] == 'a') {
+    if (hour == '12') {
+      hour = 0;
+    }
+  } else if (segments[3] == 'p') {
+    hour = parseInt(hour) + 12;
+  }
+  return {
+    hour: parseInt(hour),
+    minute: parseInt(segments[2])
+  };
 }
 
 function hourMinuteToLabel(hour, minute) {
@@ -40,6 +70,9 @@ function hourMinuteToLabel(hour, minute) {
   }
   if (hour === 0) {
     hour = 12;
+  }
+  if (minute === 0) {
+    minute = '00';
   }
   return hour + ':' + minute + amPM;
 }
@@ -81,6 +114,9 @@ function addNewBlockItem(options, existingID) {
         newBlockItem.blockEndTime = singleTime;
       } else if (newTypeRaw == 'always') {
         newBlockItem.blockType = 'always';
+      } else if (newTypeRaw == 'regular') {
+        newBlockItem.blockTimeCriteria = options.blockTimeCriteria;
+        newBlockItem.blockType = 'regular';
       }
       blockItemsNew.push(newBlockItem);
       chrome.storage.sync.set({ blockItems: blockItemsNew }, function() {});
