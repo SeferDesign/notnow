@@ -127,6 +127,7 @@ html {
   padding-bottom: 0.125rem;
   width: auto;
   color: var(--black);
+  background: var(--white);
   border: 0px;
   font-size: 2rem;
 }
@@ -372,6 +373,10 @@ p a:visited {
 .schedule .end {
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
+}
+
+.schedule-day-label {
+  font-weight: bold;
 }
 
 .schedule select {

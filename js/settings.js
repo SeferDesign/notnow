@@ -28,21 +28,21 @@ document.addEventListener('DOMContentLoaded', function() {
         } else if (blockItems[i].blockType == 'single') {
           blockItemContent += 'Blocked until ' + formatAMPM(new Date(blockItems[i].blockEndTime));
         } else if (blockItems[i].blockType == 'regular') {
-          blockItemContent += 'Blocked ';
-          if (blockItems[i].blockTimeCriteria) {
+          if (blockItems[i].blockTimeCriteria && blockItems[i].blockTimeCriteria.length > 0) {
+            blockItemContent += 'Blocked';
             for (var b = 0; b < blockItems[i].blockTimeCriteria.length; b++) {
               if (b > 0) {
                 blockItemContent += ', ';
               }
               if (blockItems[i].blockTimeCriteria[b].blockStartHour === 0 && blockItems[i].blockTimeCriteria[b].blockStartHour === 0 && blockItems[i].blockTimeCriteria[b].blockEndHour == 23 && blockItems[i].blockTimeCriteria[b].blockEndMinute) {
-                blockItemContent += ' all day ' + weekdayNames[blockItems[i].blockTimeCriteria[b].dayOfWeek];
+                blockItemContent += 'all day ' + weekdayNames[blockItems[i].blockTimeCriteria[b].dayOfWeek];
               } else {
                 blockItemContent += weekdayNames[blockItems[i].blockTimeCriteria[b].dayOfWeek] + ' ';
                 blockItemContent += hourMinuteToLabel(blockItems[i].blockTimeCriteria[b].blockStartHour, blockItems[i].blockTimeCriteria[b].blockStartMinute) + ' to ' + hourMinuteToLabel(blockItems[i].blockTimeCriteria[b].blockEndHour, blockItems[i].blockTimeCriteria[b].blockEndMinute);
               }
             }
           } else {
-            blockItemContent += 'regularly';
+            blockItemContent += 'Not currently blocked.';
           }
         }
         blockItemContent += '</div>';
@@ -361,7 +361,7 @@ function timeSelect(selected, isAllDay) {
         }
         var fullDisplay = displayH + ':' + displayM + ampm;
         content += '<option';
-        if (selected && fullDisplay == selected) {
+        if (!isAllDay && selected && fullDisplay == selected) {
           content += ' selected';
         }
         content += '>' + fullDisplay + '</option>';
