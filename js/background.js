@@ -34,3 +34,30 @@ chrome.runtime.onStartup.addListener(function() {
     }
   });
 });
+
+var cleanerAlarm = 'cleanerAlarm';
+
+chrome.alarms.create(cleanerAlarm, {
+  delayInMinutes: 1,
+  periodInMinutes: 5
+});
+
+chrome.alarms.onAlarm.addListener(function(alarm) {
+  if (alarm.name === cleanerAlarm) {
+    chrome.storage.sync.get('blockItems', function(result) {
+      if (result.blockItems && result.blockItems.length > 0) {
+        var blockItems = result.blockItems;
+        var blockItemsNew = result.blockItems;
+        for (var b = 0; b < result.blockItems.length; b++) {
+          var now = new Date();
+          if (result.blockItems[b].blockType == 'single' && result.blockItems[b].blockEndTime <= now.getTime()) {
+            blockItemsNew = result.blockItems.filter(function(el) {
+              return el.id !== result.blockItems[b].id;
+            });
+          }
+        }
+        chrome.storage.sync.set({ blockItems: blockItemsNew }, function() {});
+      }
+    });
+  }
+});

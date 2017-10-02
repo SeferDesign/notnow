@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function() {
           blockItemContent += 'Blocked until ' + formatAMPM(new Date(blockItems[i].blockEndTime));
         } else if (blockItems[i].blockType == 'regular') {
           if (blockItems[i].blockTimeCriteria && blockItems[i].blockTimeCriteria.length > 0) {
-            blockItemContent += 'Blocked';
+            blockItemContent += 'Blocked ';
             for (var b = 0; b < blockItems[i].blockTimeCriteria.length; b++) {
               if (b > 0) {
                 blockItemContent += ', ';
