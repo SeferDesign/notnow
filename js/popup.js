@@ -35,6 +35,14 @@ window.onload = function() {
           chrome.runtime.sendMessage({ type: 'reloadActive' });
           window.close();
         });
+        document.getElementById('not-now-button-add-always').addEventListener('click', function() {
+          addNewBlockItem({
+            domain: currentSiteDomain,
+            blockTypeRaw: 'always'
+          });
+          chrome.runtime.sendMessage({ type: 'reloadActive' });
+          window.close();
+        });
         document.getElementById('not-now-button-add-regular').addEventListener('click', function() {
           chrome.runtime.sendMessage({ type: 'settings', params: '?newBlock=true&domain=' + currentSiteDomain });
           window.close();

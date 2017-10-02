@@ -8,7 +8,9 @@
   --green-dark: #1c956d;
   --red: #d1285b;
   --red-dark: #9f1d44;
-  --yellow: #f9eeb8;
+  --yellow: #edae49;
+  --yellow-dark: #c28e3b;
+  --highlight: #f9f2d1;
 }
 
 html {
@@ -99,7 +101,7 @@ html {
   right: -1rem;
   bottom: 0px;
   display: block;
-  background: var(--yellow);
+  background: var(--highlight);
 }
 
 .new-block-item-form-wrap .not-now-block-item {
@@ -209,6 +211,16 @@ html {
 .not-now-button.alt:active,
 .not-now-button.alt:focus {
   background: var(--red-dark);
+}
+
+.not-now-button.alt2 {
+  background: var(--yellow);
+}
+
+.not-now-button.alt2:hover,
+.not-now-button.alt2:active,
+.not-now-button.alt2:focus {
+  background: var(--yellow-dark);
 }
 
 .new-block-item-form-wrap:before,
