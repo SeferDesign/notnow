@@ -3,7 +3,6 @@ var blockItemsG = null;
 document.addEventListener('DOMContentLoaded', function() {
   chrome.storage.sync.get('blockItems', function(result) {
     if (result.blockItems) {
-      console.log(result.blockItems);
       var blockItems = result.blockItems;
       var blockItemsG = result.blockItems;
       var blockItemsWrap = document.getElementById('not-now-block-items');

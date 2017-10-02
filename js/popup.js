@@ -29,6 +29,9 @@ window.onload = function() {
           });
           chrome.runtime.sendMessage({ type: 'reloadActive' });
         });
+        document.getElementById('not-now-button-add-regular').addEventListener('click', function() {
+          chrome.runtime.sendMessage({ type: 'settings', params: '?newBlock=true&domain=' + currentSiteDomain });
+        });
       }
     });
   });
