@@ -409,6 +409,10 @@ p a:visited {
   text-align: right;
 }
 
+.schedule .schedule-day-display {
+  width: 14.28%;
+}
+
 .schedule .all-day,
 .schedule .start,
 .schedule .end {
