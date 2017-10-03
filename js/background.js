@@ -18,6 +18,7 @@ chrome.runtime.onMessage.addListener(function(request, sender) {
 
 chrome.runtime.onInstalled.addListener(function(details) {
 	if (details.reason == 'install') {
+    chrome.storage.sync.set({ blockItems: [], pauseTime: '' }, function() {});
     chrome.storage.sync.get('blockItems', function(result) {
       if (!result || result.length < 1) {
         chrome.storage.sync.set({ blockItems: [], pauseTime: '' }, function() {});
