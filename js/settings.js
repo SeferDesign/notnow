@@ -125,9 +125,9 @@ function setTypeSelect(form) {
 function setShortcutButtons(form) {
   form.getElementsByClassName('shortcut-weekdays-9-5')[0].addEventListener('click', function(e) {
     e.preventDefault();
-    var days = form.getElementsByClassName('schedule-day');
+    var days = form.getElementsByClassName('schedule-day-edit');
     for (var d = 0; d < days.length; d++) {
-      var day = form.getElementsByClassName('schedule-day')[d];
+      var day = form.getElementsByClassName('schedule-day-edit')[d];
       day.getElementsByClassName('all-day-check')[0].checked = false;
       var selects = day.getElementsByClassName('time');
       for (var s = 0; s < selects.length; s++) {
@@ -142,9 +142,9 @@ function setShortcutButtons(form) {
   });
   form.getElementsByClassName('shortcut-weekdays')[0].addEventListener('click', function(e) {
     e.preventDefault();
-    var days = form.getElementsByClassName('schedule-day');
+    var days = form.getElementsByClassName('schedule-day-edit');
     for (var d = 0; d < days.length; d++) {
-      var day = form.getElementsByClassName('schedule-day')[d];
+      var day = form.getElementsByClassName('schedule-day-edit')[d];
       day.getElementsByClassName('all-day-check')[0].checked = false;
       var selects = day.getElementsByClassName('time');
       for (var s = 0; s < selects.length; s++) {
@@ -162,9 +162,10 @@ function setShortcutButtons(form) {
   });
   form.getElementsByClassName('shortcut-weekends')[0].addEventListener('click', function(e) {
     e.preventDefault();
-    var days = form.getElementsByClassName('schedule-day');
+    var days = form.getElementsByClassName('schedule-day-edit');
     for (var d = 0; d < days.length; d++) {
-      var day = form.getElementsByClassName('schedule-day')[d];
+      var day = form.getElementsByClassName('schedule-day-edit')[d];
+      console.log(day);
       day.getElementsByClassName('all-day-check')[0].checked = false;
       var selects = day.getElementsByClassName('time');
       for (var s = 0; s < selects.length; s++) {
@@ -194,7 +195,7 @@ function setSaveButton(form, button) {
       };
       if (typeSelection.options[typeSelection.selectedIndex].value == 'regular') {
         object.blockTimeCriteria = [];
-        var days = form.getElementsByClassName('schedule-day');
+        var days = form.getElementsByClassName('schedule-day-edit');
         for (var d = 0; d < days.length; d++) {
           var allDayStatus = false;
           if (days[d].getElementsByClassName('all-day-check')[0].checked) {
@@ -319,7 +320,7 @@ function blockItemFormMarkup(existingBlockType, existingCriteria) {
 }
 
 function scheduleDay(dayNumber, existingStartHour, existingStartMinute, existingEndHour, existingEndMinute) {
-  var content = '<div class="schedule-day" data-day-id="' + dayNumber + '">';
+  var content = '<div class="schedule-day schedule-day-edit" data-day-id="' + dayNumber + '">';
     content += '<div class="schedule-day-label">' + weekdayAbbreviations[dayNumber] + '</div>';
     var isAllDay = false;
     if (existingStartHour === 0 && existingStartMinute === 0 && existingEndHour == 23 && existingEndMinute == 59) {
