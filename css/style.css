@@ -79,6 +79,10 @@ html {
   max-width: 868px;
 }
 
+.not-now-settings-header {
+  text-align: center;
+}
+
 .not-now-paused-text {
   margin-top: 2rem;
   color: var(--blue);
