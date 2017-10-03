@@ -169,7 +169,6 @@ function setShortcutButtons(form) {
     var days = form.getElementsByClassName('schedule-day-edit');
     for (var d = 0; d < days.length; d++) {
       var day = form.getElementsByClassName('schedule-day-edit')[d];
-      console.log(day);
       day.getElementsByClassName('all-day-check')[0].checked = false;
       var selects = day.getElementsByClassName('time');
       for (var s = 0; s < selects.length; s++) {
