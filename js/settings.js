@@ -36,18 +36,29 @@ document.addEventListener('DOMContentLoaded', function() {
           blockItemContent += 'Blocked until ' + formatAMPM(new Date(blockItems[i].blockEndTime));
         } else if (blockItems[i].blockType == 'regular') {
           if (blockItems[i].blockTimeCriteria && blockItems[i].blockTimeCriteria.length > 0) {
-            blockItemContent += 'Blocked ';
-            for (var b = 0; b < blockItems[i].blockTimeCriteria.length; b++) {
-              if (b > 0) {
-                blockItemContent += ', ';
-              }
-              if (blockItems[i].blockTimeCriteria[b].blockStartHour === 0 && blockItems[i].blockTimeCriteria[b].blockStartHour === 0 && blockItems[i].blockTimeCriteria[b].blockEndHour == 23 && blockItems[i].blockTimeCriteria[b].blockEndMinute) {
-                blockItemContent += 'all day ' + weekdayNames[blockItems[i].blockTimeCriteria[b].dayOfWeek];
-              } else {
-                blockItemContent += weekdayNames[blockItems[i].blockTimeCriteria[b].dayOfWeek] + ' ';
-                blockItemContent += hourMinuteToLabel(blockItems[i].blockTimeCriteria[b].blockStartHour, blockItems[i].blockTimeCriteria[b].blockStartMinute) + ' to ' + hourMinuteToLabel(blockItems[i].blockTimeCriteria[b].blockEndHour, blockItems[i].blockTimeCriteria[b].blockEndMinute);
-              }
+            blockItemContent += '<div class="blocked-description-regular schedule">';
+            for (var d = 0; d < 7; d++) {
+              var thisDay = blockItems[i].blockTimeCriteria.filter(function(obj) {
+                return obj.dayOfWeek == d;
+              });
+              blockItemContent += '<div class="schedule-day schedule-day-display';
+              if (thisDay.length > 0) { blockItemContent += ' active'; }
+              blockItemContent += '">';
+                blockItemContent += '<div class="schedule-day-label">' + weekdayAbbreviations[d] + '</div>';
+                blockItemContent += '<div class="schedule-day-time-display">';
+                if (thisDay.length > 0) {
+                  if (thisDay[0].blockStartHour === 0 && thisDay[0].blockStartHour === 0 && thisDay[0].blockEndHour == 23 && thisDay[0].blockEndMinute) {
+                    blockItemContent += '<br>All Day<br>';
+                  } else {
+                    blockItemContent += hourMinuteToLabel(thisDay[0].blockStartHour, thisDay[0].blockStartMinute) + '<br>to<br>' + hourMinuteToLabel(thisDay[0].blockEndHour, thisDay[0].blockEndMinute);
+                  }
+                } else {
+                  blockItemContent += '<br>&mdash;<br>';
+                }
+                blockItemContent += '</div>';
+              blockItemContent += '</div>';
             }
+            blockItemContent += '</div>';
           } else {
             blockItemContent += 'Not currently blocked.';
           }

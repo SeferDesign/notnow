@@ -30,6 +30,14 @@ html {
 
 .not-now h1 {
   font-size: 2rem;
+  line-height: 1;
+}
+
+.not-now h1 .icon {
+  display: inline-block;
+  vertical-align: bottom;
+  margin-right: 0.25em;
+  height: 1em;
 }
 
 .not-now-list-header {
@@ -168,6 +176,9 @@ html {
 }
 
 .not-now-message {
+  display: block;
+  margin: 0px auto;
+  max-width: 33.5rem;
   font-size: 2rem;
 }
 
@@ -361,6 +372,22 @@ p a:visited {
 
 .schedule-active .schedule-wrap {
   display: block;
+}
+
+.blocked-description-regular {
+  margin-top: 1rem;
+}
+
+.schedule-day-display {
+  opacity: 0.25;
+}
+
+.schedule-day-display.active {
+  opacity: 1;
+}
+
+.schedule-day-display .schedule-day-time-display {
+  margin-top: 1rem;
 }
 
 .schedule .left-col,
