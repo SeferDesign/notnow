@@ -33,7 +33,11 @@ document.addEventListener('DOMContentLoaded', function() {
         if (blockItems[i].blockType == 'always') {
           blockItemContent += 'Always blocked';
         } else if (blockItems[i].blockType == 'single') {
+          var now = new Date();
           blockItemContent += 'Blocked until ' + formatAMPM(new Date(blockItems[i].blockEndTime));
+          if (now.getTime() >= blockItems[i].blockEndTime) {
+            blockItemContent += ' <span class="expired">&mdash; Expired</span>'
+          }
         } else if (blockItems[i].blockType == 'regular') {
           if (blockItems[i].blockTimeCriteria && blockItems[i].blockTimeCriteria.length > 0) {
             blockItemContent += '<div class="blocked-description-regular schedule">';

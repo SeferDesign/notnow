@@ -298,6 +298,11 @@ html {
   display: none;
 }
 
+.not-now-block-item-type .expired {
+  opacity: 0.5;
+  font-style: italic;
+}
+
 .not-now-block-item-buttons .not-now-button {
   font-size: 0.625rem;
 }
