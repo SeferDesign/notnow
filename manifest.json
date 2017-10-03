@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "Not Now",
   "short_name": "Not Now",
-  "version": "0.9.4",
+  "version": "1.0.0",
   "description": "A Google Chrome extension to help minimize distractions.",
   "options_page": "pages/settings.html",
   "icons": {
