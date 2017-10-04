@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
       }
     } else {
-      blockItemsWrap.innerHTML = '<p>No sites currently blocked.</p>';
+      blockItemsWrap.innerHTML = '<p class="no-sites">No sites currently blocked.</p>';
     }
   });
 });

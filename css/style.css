@@ -2,6 +2,7 @@
   --black: #000;
   --white: #fff;
   --grey: #ddd;
+  --grey-light: #f4f4f4;
   --blue: #288fd1;
   --blue-dark: #1c6ea2;
   --green: #28d199;
@@ -42,10 +43,8 @@ html {
 
 .not-now-list-header {
   margin: 2rem 0px;
-  padding: 1rem 0px;
-  border: 1px solid var(--grey);
-  border-left: 0px;
-  border-right: 0px;
+  padding: 1rem;
+  background: var(--grey-light);
 }
 
 .not-now-list-header .block-list-title,
@@ -100,29 +99,20 @@ html {
 }
 
 .not-now-block-item {
+  padding-left: 1rem;
+  padding-right: 1rem;
   font-size: 1.5rem;
 }
 
 .new-block-item-form-wrap {
-  z-index: 1;
-  position: relative;
+  padding: 0px 1rem;
+  margin-bottom: 2rem;
+  background: var(--highlight);
 }
 
 .new-block-item-form-wrap h3 {
   margin-bottom: 0.5rem;
   font-size: 1rem;
-}
-
-.new-block-item-form-wrap:after {
-  content: ' ';
-  z-index: 0;
-  position: absolute;
-  top: 0px;
-  left: -1rem;
-  right: -1rem;
-  bottom: 0px;
-  display: block;
-  background: var(--highlight);
 }
 
 .new-block-item-form-wrap .not-now-block-item {
@@ -151,6 +141,11 @@ html {
   background: var(--white);
   border: 0px;
   font-size: 2rem;
+}
+
+.no-sites {
+  padding-left: 1rem;
+  padding-right: 1rem;
 }
 
 .not-now-modal {
