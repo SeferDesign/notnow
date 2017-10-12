@@ -78,7 +78,7 @@ function displayModal(criteria) {
       div.innerHTML = xhttp.responseText;
       document.documentElement.appendChild(div);
       var img = document.getElementsByClassName('not-now-image');
-      img[0].src = chrome.extension.getURL('../img/sanders-no.gif');
+      img[0].src = chrome.extension.getURL('../img/sanders-no.webp');
 
       document.head.innerHTML = '';
       document.head.innerHTML = '<title>Blocked</title>';
