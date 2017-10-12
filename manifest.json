@@ -3,7 +3,7 @@
   "name": "Not Now",
   "short_name": "Not Now",
   "version": "1.0.4",
-  "description": "A Google Chrome extension to help minimize distractions.",
+  "description": "Minimize distractions by blocking any web site for a set period of time.",
   "options_page": "pages/settings.html",
   "icons": {
     "128": "img/icon-color.png",
