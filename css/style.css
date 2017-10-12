@@ -42,7 +42,7 @@ html {
 }
 
 .not-now-list-header {
-  margin: 2rem 0px;
+  margin: 0px 0px 2rem;
   padding: 1rem;
   background: var(--grey-light);
 }
@@ -76,6 +76,42 @@ html {
 .not-now-settings {
   margin: 2rem auto;
   max-width: 868px;
+}
+
+.not-now-settings-nav {
+  margin-top: 2rem;
+  border-bottom: 1px solid var(--grey);
+}
+
+.not-now-settings-nav a {
+  display: inline-block;
+  margin-left: 0.5rem;
+  transform: translate(0px, 1px);
+  padding: 0.5rem 0.75rem;
+  color: var(--blue);
+  background: var(--grey-light);
+  text-transform: uppercase;
+  border: 1px solid transparent;
+  border-bottom: 1px solid var(--grey);
+  border-top-left-radius: 0.25em;
+  border-top-right-radius: 0.25em;
+  text-decoration: none;
+}
+
+.not-now-settings-nav a.active {
+  color: var(--black);
+  background: none;
+  border: 1px solid var(--grey);
+  border-bottom-color: var(--white);
+}
+
+.not-now-settings-tab {
+  display: none;
+  padding-top: 2rem;
+}
+
+.not-now-settings-tab.active {
+  display: block;
 }
 
 .not-now-settings-header {

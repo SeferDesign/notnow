@@ -1,12 +1,24 @@
 var blockItemsG = null;
+var tabsA;
 
 document.addEventListener('DOMContentLoaded', function() {
+
   chrome.storage.sync.get('pauseTime', function(result) {
     var now = new Date();
     if (result.pauseTime && result.pauseTime >= now.getTime()) {
       document.getElementsByClassName('not-now-paused')[0].innerHTML = '<div class="not-now-paused-text">Paused until ' + formatAMPM(new Date(result.pauseTime)) + '.</div>';
     }
   });
+
+  tabsA = document.querySelectorAll('.not-now-settings-nav > a');
+
+	for (var i = 0; i < tabsA.length; i++) {
+		tabsA[i].addEventListener('click', tabClicks);
+	}
+
+  if (window.location.hash == '#advanced') {
+    document.getElementById('a-advanced').click();
+  }
 
   var params = getParameters();
   if (params && params.newBlock == 'true' && params.domain && params.domain.length > 0) {
@@ -115,6 +127,28 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 });
+
+function tabClicks(tabClickEvent) {
+  for (var i = 0; i < tabsA.length; i++) {
+    tabsA[i].classList.remove('active');
+  }
+  var clickedTab = tabClickEvent.currentTarget;
+  clickedTab.classList.add('active');
+  tabClickEvent.preventDefault();
+  var myContentPanes = document.querySelectorAll('.not-now-settings-tab');
+
+  for (i = 0; i < myContentPanes.length; i++) {
+    myContentPanes[i].classList.remove('active');
+  }
+
+  var anchorReference = tabClickEvent.target;
+  var activePaneID = anchorReference.getAttribute('href');
+  var activePane = document.querySelector(activePaneID);
+
+  activePane.classList.add('active');
+  window.location.hash = activePaneID;
+
+}
 
 function setTypeSelect(form) {
   form.getElementsByClassName('block-type-select')[0].addEventListener('change', function() {
