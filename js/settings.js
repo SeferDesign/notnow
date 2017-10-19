@@ -27,6 +27,8 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('not-now-add-new-button').addEventListener('click', function() {
     displayNewBlockItemForm('');
   });
+
+  // Block Items
   chrome.storage.sync.get('blockItems', function(result) {
     var blockItemsWrap = document.getElementById('not-now-block-items');
     if (result.blockItems && result.blockItems.length > 0) {
@@ -125,6 +127,40 @@ document.addEventListener('DOMContentLoaded', function() {
     } else {
       blockItemsWrap.innerHTML = '<p class="no-sites">No sites currently blocked.</p>';
     }
+  });
+
+  // Advanced
+  chrome.storage.sync.get('settings', function(result) {
+    var settings = result.settings;
+    var advancedWrap = document.getElementById('advanced');
+    var content = '';
+    let form = document.createElement('form');
+    form.className += 'not-now-settings-advanced-form';
+    content += '<label for="pause-time">Pause Time:</label>';
+    content += '<select id="pause-time" name=""pause-time">';
+      var pauseTimes = [
+        {
+          time: '300000',
+          label: '5 minutes'
+        },
+        {
+          time: '900000',
+          label: '15 minutes'
+        },
+        {
+          time: '3600000',
+          label: '1 hour'
+        }
+      ];
+      for (var i = 0; i < pauseTimes.length; i++) {
+        content += '<option value="' + pauseTimes[i].time + '"';
+        if (settings.puaseTime == pauseTimes[i].time) {
+          content += ' selected';
+        }
+        content += '>' + pauseTimes[i].label + '</option>';
+      }
+    content += '</select>';
+    advancedWrap.innerHTML = content;
   });
 });
 

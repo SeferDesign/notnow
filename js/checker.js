@@ -12,7 +12,7 @@ function testIfBlockIsActive(url) {
           }
         }
       } else {
-        chrome.storage.sync.set({ blockItems: [], pauseTime: '' }, function() {});
+        resetStorage();
       }
     }
   });
@@ -69,50 +69,54 @@ function displayModal(criteria) {
   xhttp.open('GET', chrome.extension.getURL('../pages/blocked.html'), true);
   xhttp.onreadystatechange = function() {
     if (xhttp.readyState == XMLHttpRequest.DONE && xhttp.status == 200) {
-      var style = document.createElement('link');
-      style.rel = 'stylesheet';
-      style.type = 'text/css';
-      style.href = chrome.extension.getURL('../css/style.css');
-      document.documentElement.appendChild(style);
+      chrome.storage.sync.get('settings', function(result) {
+        var settings = result.settings;
 
-      div.innerHTML = xhttp.responseText;
-      document.documentElement.appendChild(div);
-      var img = document.getElementsByClassName('not-now-image');
-      img[0].src = chrome.extension.getURL('../img/sanders-no.webp');
+        var style = document.createElement('link');
+        style.rel = 'stylesheet';
+        style.type = 'text/css';
+        style.href = chrome.extension.getURL('../css/style.css');
+        document.documentElement.appendChild(style);
 
-      document.head.innerHTML = '';
-      document.head.innerHTML = '<title>Blocked</title>';
-      document.body.className = '';
-      document.body.innerHTML = '';
+        div.innerHTML = xhttp.responseText;
+        document.documentElement.appendChild(div);
+        var img = document.getElementsByClassName('not-now-image');
+        img[0].src = chrome.extension.getURL('../img/blocks/' + blockImages[settings.blockImage]);
 
-      var blockedCriteriaEl = document.getElementById('not-now-blocked-criteria-message');
+        document.head.innerHTML = '';
+        document.head.innerHTML = '<title>Blocked</title>';
+        document.body.className = '';
+        document.body.innerHTML = '';
 
-      var criteriaMessage = criteria.domain + ' is blocked';
-      var now = new Date();
-      if (criteria.blockType == 'regular') {
-        if (criteria.criteria.blockStartHour === 0 && criteria.criteria.blockStartMinute === 0 && criteria.criteria.blockEndHour == 23 && criteria.criteria.blockEndMinute == 59) {
-          criteriaMessage += ' all day every ' + weekdayNames[now.getDay()] + '.';
-        } else {
-          var timeStart = hourMinuteToLabel(criteria.criteria.blockStartHour, criteria.criteria.blockStartMinute);
-          var timeEnd = hourMinuteToLabel(criteria.criteria.blockEndHour, criteria.criteria.blockEndMinute);
-          criteriaMessage += ' every ' + weekdayNames[now.getDay()] + ' from ' + timeStart + ' to ' + timeEnd + '.';
+        var blockedCriteriaEl = document.getElementById('not-now-blocked-criteria-message');
+
+        var criteriaMessage = criteria.domain + ' is blocked';
+        var now = new Date();
+        if (criteria.blockType == 'regular') {
+          if (criteria.criteria.blockStartHour === 0 && criteria.criteria.blockStartMinute === 0 && criteria.criteria.blockEndHour == 23 && criteria.criteria.blockEndMinute == 59) {
+            criteriaMessage += ' all day every ' + weekdayNames[now.getDay()] + '.';
+          } else {
+            var timeStart = hourMinuteToLabel(criteria.criteria.blockStartHour, criteria.criteria.blockStartMinute);
+            var timeEnd = hourMinuteToLabel(criteria.criteria.blockEndHour, criteria.criteria.blockEndMinute);
+            criteriaMessage += ' every ' + weekdayNames[now.getDay()] + ' from ' + timeStart + ' to ' + timeEnd + '.';
+          }
+        } else if (criteria.blockType == 'single') {
+          criteriaMessage += ' until ' + formatAMPM(new Date(criteria.blockEndTime)) + '.';
+        } else if (criteria.blockType == 'always') {
+          criteriaMessage += ' at all times.';
         }
-      } else if (criteria.blockType == 'single') {
-        criteriaMessage += ' until ' + formatAMPM(new Date(criteria.blockEndTime)) + '.';
-      } else if (criteria.blockType == 'always') {
-        criteriaMessage += ' at all times.';
-      }
-      blockedCriteriaEl.innerHTML = criteriaMessage;
+        blockedCriteriaEl.innerHTML = criteriaMessage;
 
-      var pauseButton = document.getElementById('not-now-pause-button');
-      pauseButton.addEventListener('click', function() {
-        chrome.runtime.sendMessage({ type: 'pause' });
-        location.reload();
-      });
+        var pauseButton = document.getElementById('not-now-pause-button');
+        pauseButton.addEventListener('click', function() {
+          chrome.runtime.sendMessage({ type: 'pause' });
+          location.reload();
+        });
 
-      var settingsButton = document.getElementById('not-now-settings-button');
-      settingsButton.addEventListener('click', function() {
-        chrome.runtime.sendMessage({ type: 'settings' });
+        var settingsButton = document.getElementById('not-now-settings-button');
+        settingsButton.addEventListener('click', function() {
+          chrome.runtime.sendMessage({ type: 'settings' });
+        });
       });
     }
   };

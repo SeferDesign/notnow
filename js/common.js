@@ -18,6 +18,10 @@ var weekdayAbbreviations = [
   'Sat'
 ];
 
+var blockImages = {
+  'bernie': 'sanders-no.webp'
+};
+
 function extractHostname(url) {
   var hostname;
   if (url.indexOf('://') > -1) {

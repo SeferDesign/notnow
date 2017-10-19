@@ -1,3 +1,8 @@
+var defaultSettings = {
+  blockImage: 'bernie',
+  pauseTime: 5 * 60 * 1000
+};
+
 chrome.runtime.onMessage.addListener(function(request, sender) {
   if (request.type == 'settings') {
     //chrome.runtime.openOptionsPage();
@@ -12,26 +17,49 @@ chrome.runtime.onMessage.addListener(function(request, sender) {
     });
   } else if (request.type == 'pause') {
     var now = new Date();
-    chrome.storage.sync.set({ pauseTime: now.getTime() + (5 * 60 * 1000)  }, function() {});
+    chrome.storage.sync.set({ pauseTime: now.getTime() + settings.pauseTime }, function() {});
   }
 });
 
 chrome.runtime.onInstalled.addListener(function(details) {
 	if (details.reason == 'install') {
-    chrome.storage.sync.set({ blockItems: [], pauseTime: '' }, function() {});
+    resetStorage();
     chrome.storage.sync.get('blockItems', function(result) {
       if (!result || result.length < 1) {
-        chrome.storage.sync.set({ blockItems: [], pauseTime: '' }, function() {});
+        resetBlockItems();
+      }
+    });
+    chrome.storage.sync.get('settings', function(result) {
+      if (!result || result.length < 1) {
+        resetSettings();
       }
     });
     chrome.runtime.sendMessage({ type: 'settings' });
-	}
+	} else if (details.reason == 'update') {
+    chrome.storage.sync.get('blockItems', function(result) {
+      if (!result || result.length < 1) {
+        resetBlockItems();
+      }
+    });
+    chrome.storage.sync.get('settings', function(result) {
+      if (!result || result.length < 1) {
+        resetSettings();
+      }
+    });
+  }
 });
 
 chrome.runtime.onStartup.addListener(function() {
+  chrome.storage.sync.get('settings', function(result) {
+    if (!result || result.length < 1) {
+      resetSettings();
+    } else {
+      settings = result.settings;
+    }
+  });
   chrome.storage.sync.get('blockItems', function(result) {
     if (!result || result.length < 1) {
-      chrome.storage.sync.set({ blockItems: [], pauseTime: '' }, function() {});
+      resetBlockItems();
     }
   });
 });
@@ -62,3 +90,21 @@ chrome.alarms.onAlarm.addListener(function(alarm) {
     });
   }
 });
+
+function resetStorage() {
+  resetBlockItems();
+  resetSettings();
+  resetPauseTime();
+}
+
+function resetBlockItems() {
+  chrome.storage.sync.set({ blockItems: [] }, function() {});
+}
+
+function resetSettings() {
+  chrome.storage.sync.set({ settings: defaultSettings }, function() {});
+}
+
+function resetPauseTime() {
+  chrome.storage.sync.set({ pauseTime: '' }, function() {});
+}
