@@ -19,8 +19,26 @@ var weekdayAbbreviations = [
 ];
 
 var blockImages = {
-  'bernie': 'sanders-no.webp'
+  'kanye': 'kanye.webp',
+  'bernie': 'bernie.webp',
+  'oprah': 'oprah.webp',
+  'hill': 'hill.webp'
 };
+
+var pauseTimes = [
+  {
+    time: 5 * 60 * 1000,
+    label: '5 minutes'
+  },
+  {
+    time: 15 * 60 * 1000,
+    label: '15 minutes'
+  },
+  {
+    time: 60 * 60 * 1000,
+    label: '1 hour'
+  }
+];
 
 function extractHostname(url) {
   var hostname;

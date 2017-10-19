@@ -118,6 +118,59 @@ html {
   text-align: center;
 }
 
+.not-now-setting-block {
+  margin-bottom: 0.5rem;
+}
+
+.not-now-setting-block:not(:last-of-type) {
+  margin-bottom: 0.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--black);
+}
+
+.not-now-setting-block .setting-block-col {
+  display: inline-block;
+  width: 50%;
+}
+
+.not-now-setting-block h3 {
+  margin: 0px;
+}
+
+.not-now-setting-block select {
+  display: block;
+  width: 100%;
+}
+
+.settings-image-wrap {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.settings-image-wrap label {
+  display: inline-block;
+  vertical-align: top;
+  margin-bottom: 1rem;
+}
+
+.settings-image-wrap label:not(:first-of-type) {
+  margin-left: 1rem;
+}
+
+.settings-image-wrap input {
+  margin-right: 0.5rem;
+}
+
+.settings-image-wrap img {
+  display: inline-block;
+  vertical-align: top;
+  max-width: 100px;
+}
+
+.not-now-advanced-save-wrap {
+  text-align: right;
+}
+
 .not-now-paused-text {
   margin-top: 2rem;
   color: var(--blue);
@@ -205,9 +258,14 @@ html {
 }
 
 .not-now-image {
-  margin-bottom: 1.5rem;
+  display: none;
+  margin: 0px auto 1.5rem;
   width: 80vw;
   max-width: 25rem;
+}
+
+.not-now-image.active {
+  display: block;
 }
 
 .not-now-message {

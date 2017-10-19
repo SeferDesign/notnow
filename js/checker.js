@@ -80,13 +80,30 @@ function displayModal(criteria) {
 
         div.innerHTML = xhttp.responseText;
         document.documentElement.appendChild(div);
-        var img = document.getElementsByClassName('not-now-image');
-        img[0].src = chrome.extension.getURL('../img/blocks/' + blockImages[settings.blockImage]);
+        if (settings.blockImage != 'none') {
+          var img = document.getElementsByClassName('not-now-image');
+          var imageName = '';
+          if (settings.blockImage == 'random') {
+            var imageKeys = Object.keys(blockImages);
+            var randomKey = Math.floor(Math.random() * imageKeys.length);
+            imageName = blockImages[imageKeys[randomKey]];
+          } else {
+            imageName = blockImages[settings.blockImage];
+          }
+          img[0].src = chrome.extension.getURL('../img/blocks/' + imageName);
+          img[0].classList += ' active';
+        }
 
         document.head.innerHTML = '';
         document.head.innerHTML = '<title>Blocked</title>';
         document.body.className = '';
         document.body.innerHTML = '';
+
+        var pauseButton = document.getElementById('not-now-pause-button');
+        var pauseObject = pauseTimes.find(function(obj) { return obj.time === settings.pauseTime; });
+        var pausePhrase = 'Pause for ' + pauseObject.label;
+        pauseButton.innerHTML = pausePhrase;
+        pauseButton.setAttribute('title', pausePhrase);
 
         var blockedCriteriaEl = document.getElementById('not-now-blocked-criteria-message');
 

@@ -1,6 +1,6 @@
 var defaultSettings = {
-  blockImage: 'bernie',
-  pauseTime: 5 * 60 * 1000
+  blockImage: 'random',
+  pauseTime: 5 * 60 * 1000, // 5 minutes
 };
 
 chrome.runtime.onMessage.addListener(function(request, sender) {
@@ -16,8 +16,12 @@ chrome.runtime.onMessage.addListener(function(request, sender) {
       chrome.tabs.reload(tabs[0].id);
     });
   } else if (request.type == 'pause') {
-    var now = new Date();
-    chrome.storage.sync.set({ pauseTime: now.getTime() + settings.pauseTime }, function() {});
+    chrome.storage.sync.get('settings', function(result) {
+      var settings = result.settings;
+      var now = new Date();
+      chrome.storage.sync.set({ pauseTime: now.getTime() + settings.pauseTime }, function() {});
+    });
+
   }
 });
 

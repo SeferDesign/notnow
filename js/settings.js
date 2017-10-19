@@ -132,35 +132,56 @@ document.addEventListener('DOMContentLoaded', function() {
   // Advanced
   chrome.storage.sync.get('settings', function(result) {
     var settings = result.settings;
-    var advancedWrap = document.getElementById('advanced');
+    var advancedWrap = document.getElementById('advanced-settings-wrap');
     var content = '';
     let form = document.createElement('form');
     form.className += 'not-now-settings-advanced-form';
-    content += '<label for="pause-time">Pause Time:</label>';
+
+    content += '<div class="not-now-setting-block"><div class="setting-block-col"><label for="pause-time"><h3>Pause Time</h3</label></div><div class="setting-block-col">';
     content += '<select id="pause-time" name=""pause-time">';
-      var pauseTimes = [
-        {
-          time: '300000',
-          label: '5 minutes'
-        },
-        {
-          time: '900000',
-          label: '15 minutes'
-        },
-        {
-          time: '3600000',
-          label: '1 hour'
-        }
-      ];
       for (var i = 0; i < pauseTimes.length; i++) {
         content += '<option value="' + pauseTimes[i].time + '"';
-        if (settings.puaseTime == pauseTimes[i].time) {
+        if (settings.pauseTime == pauseTimes[i].time) {
           content += ' selected';
         }
         content += '>' + pauseTimes[i].label + '</option>';
       }
-    content += '</select>';
+    content += '</select></div></div>';
+
+    content += '<div class="not-now-setting-block"><h3>Image</h3><div class="settings-image-wrap">';
+
+    content += '<label><input type="radio" name="image" value="none"';
+    if (settings.blockImage == 'none') { content += ' checked'; }
+    content += '>None</label>';
+
+    content += '<label><input type="radio" name="image" value="random"';
+    if (settings.blockImage == 'random') { content += ' checked'; }
+    content += '>Random</label>';
+
+    for (var key in blockImages) {
+      content += '<label><input type="radio" name="image" value="' + key + '"';
+      if (settings.blockImage == key) {
+        content += ' checked';
+      }
+      content += '><img src="' + chrome.extension.getURL('../img/blocks/' + blockImages[key]) + '"></label>';
+    }
+    content += '</div></div>';
+
+    content += '<div class="not-now-advanced-save-wrap"><button id="not-now-save-settings-button" class="not-now-button not-now-save-settings-button success" title="Save Settings">Save Settings</button></div>';
     advancedWrap.innerHTML = content;
+    var saveButton = document.getElementById('not-now-save-settings-button');
+    saveButton.addEventListener('click', function() {
+
+      var pauseTimeSelect = document.getElementById('pause-time');
+      settings.pauseTime = parseInt(pauseTimeSelect.options[pauseTimeSelect.selectedIndex].value);
+
+      var blockImageRadio = document.querySelector('input[name="image"]:checked').value;
+      settings.blockImage = blockImageRadio;
+
+      chrome.storage.sync.set({ settings: settings }, function() {
+        location.reload();
+      });
+    });
   });
 });
 
