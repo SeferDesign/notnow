@@ -137,7 +137,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let form = document.createElement('form');
     form.className += 'not-now-settings-advanced-form';
 
-    content += '<div class="not-now-setting-block"><div class="setting-block-col"><label for="pause-time"><h3>Pause Time</h3</label></div><div class="setting-block-col">';
+    content += '<div class="not-now-setting-blocks"><div class="not-now-setting-block"><div class="setting-block-col"><label for="pause-time"><h3>Pause Time</h3</label></div><div class="setting-block-col">';
     content += '<select id="pause-time" name=""pause-time">';
       for (var i = 0; i < pauseTimes.length; i++) {
         content += '<option value="' + pauseTimes[i].time + '"';
@@ -167,7 +167,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     content += '</div></div>';
 
-    content += '<div class="not-now-advanced-save-wrap"><button id="not-now-save-settings-button" class="not-now-button not-now-save-settings-button success" title="Save Settings">Save Settings</button></div>';
+    content += '</div><div class="not-now-advanced-save-wrap"><button id="not-now-save-settings-button" class="not-now-button not-now-save-settings-button success" title="Save Settings">Save Settings</button></div>';
     advancedWrap.innerHTML = content;
     var saveButton = document.getElementById('not-now-save-settings-button');
     saveButton.addEventListener('click', function() {

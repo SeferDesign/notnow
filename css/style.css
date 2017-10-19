@@ -118,13 +118,9 @@ html {
   text-align: center;
 }
 
-.not-now-setting-block {
-  margin-bottom: 0.5rem;
-}
-
 .not-now-setting-block:not(:last-of-type) {
-  margin-bottom: 0.5rem;
-  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+  padding-bottom: 2rem;
   border-bottom: 1px solid var(--black);
 }
 
@@ -168,6 +164,7 @@ html {
 }
 
 .not-now-advanced-save-wrap {
+  margin-top: 2rem;
   text-align: right;
 }
 
