@@ -72,6 +72,10 @@ function displayModal(criteria) {
       chrome.storage.sync.get('settings', function(result) {
         var settings = result.settings;
 
+        if (!settings) {
+          settings = defaultSettings;
+          chrome.runtime.sendMessage({ type: 'resetSettings' });
+        }
         var style = document.createElement('link');
         style.rel = 'stylesheet';
         style.type = 'text/css';
@@ -80,6 +84,7 @@ function displayModal(criteria) {
 
         div.innerHTML = xhttp.responseText;
         document.documentElement.appendChild(div);
+
         if (settings.blockImage != 'none') {
           var img = document.getElementsByClassName('not-now-image');
           var imageName = '';

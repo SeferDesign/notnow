@@ -6,6 +6,8 @@ chrome.runtime.onMessage.addListener(function(request, sender) {
       params = request.params;
     }
     window.open(chrome.runtime.getURL('pages/settings.html') + params);
+  } else if (request.type == 'resetSettings') {
+    resetSettings();
 	} else if (request.type == 'reloadActive') {
     chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
       chrome.tabs.reload(tabs[0].id);
@@ -86,16 +88,13 @@ function resetStorage() {
 }
 
 function resetBlockItems() {
-  console.log('testB');
   chrome.storage.sync.set({ blockItems: [] }, function() {});
 }
 
 function resetSettings() {
-  console.log('testS');
   chrome.storage.sync.set({ settings: defaultSettings }, function() {});
 }
 
 function resetPauseTime() {
-  console.log('testP');
   chrome.storage.sync.set({ pauseTime: '' }, function() {});
 }
