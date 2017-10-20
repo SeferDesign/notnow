@@ -27,6 +27,10 @@ var blockImages = {
 
 var pauseTimes = [
   {
+    time: 1 * 60 * 1000,
+    label: '1 minute'
+  },
+  {
     time: 5 * 60 * 1000,
     label: '5 minutes'
   },
