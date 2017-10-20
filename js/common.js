@@ -161,3 +161,23 @@ function transformToAssocArray(prmstr) {
   }
   return params;
 }
+
+var defaultSettings = {
+  blockImage: 'random',
+  pauseTime: 5 * 60 * 1000, // 5 minutes
+};
+
+function checkSettings(given) {
+  var newSettings = given;
+  if (!newSettings) {
+    newSettings = defaultSettings;
+  } else {
+    if (!given.pauseTime) {
+      newSettings.pauseTime = defaultSettings.pauseTime;
+    }
+    if (!given.blockImage) {
+      newSettings.blockImage = defaultSettings.blockImage;
+    }
+  }
+  return newSettings;
+}

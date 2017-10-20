@@ -1,8 +1,3 @@
-var defaultSettings = {
-  blockImage: 'random',
-  pauseTime: 5 * 60 * 1000, // 5 minutes
-};
-
 chrome.runtime.onMessage.addListener(function(request, sender) {
   if (request.type == 'settings') {
     //chrome.runtime.openOptionsPage();
@@ -28,44 +23,15 @@ chrome.runtime.onMessage.addListener(function(request, sender) {
 chrome.runtime.onInstalled.addListener(function(details) {
 	if (details.reason == 'install') {
     resetStorage();
-    chrome.storage.sync.get('blockItems', function(result) {
-      if (!result || result.length < 1) {
-        resetBlockItems();
-      }
-    });
-    chrome.storage.sync.get('settings', function(result) {
-      if (!result || result.length < 1) {
-        resetSettings();
-      }
-    });
+    testStorage();
     chrome.runtime.sendMessage({ type: 'settings' });
 	} else if (details.reason == 'update') {
-    chrome.storage.sync.get('blockItems', function(result) {
-      if (!result || result.length < 1) {
-        resetBlockItems();
-      }
-    });
-    chrome.storage.sync.get('settings', function(result) {
-      if (!result || result.length < 1) {
-        resetSettings();
-      }
-    });
+    testStorage();
   }
 });
 
 chrome.runtime.onStartup.addListener(function() {
-  chrome.storage.sync.get('settings', function(result) {
-    if (!result || result.length < 1) {
-      resetSettings();
-    } else {
-      settings = result.settings;
-    }
-  });
-  chrome.storage.sync.get('blockItems', function(result) {
-    if (!result || result.length < 1) {
-      resetBlockItems();
-    }
-  });
+  testStorage();
 });
 
 var cleanerAlarm = 'cleanerAlarm';
@@ -95,6 +61,24 @@ chrome.alarms.onAlarm.addListener(function(alarm) {
   }
 });
 
+function testStorage() {
+  chrome.storage.sync.get('blockItems', function(result) {
+    if (result === null || typeof result == 'undefined' || !result || result.length < 1) {
+      resetBlockItems();
+    }
+  });
+  chrome.storage.sync.get('pauseTime', function(result) {
+    if (result === null || typeof result == 'undefined' || !result || result.length < 1) {
+      resetPauseTime();
+    }
+  });
+  chrome.storage.sync.get('settings', function(result) {
+    if (result === null || typeof result == 'undefined' || !result || result.length < 1) {
+      resetSettings();
+    }
+  });
+}
+
 function resetStorage() {
   resetBlockItems();
   resetSettings();
@@ -102,13 +86,16 @@ function resetStorage() {
 }
 
 function resetBlockItems() {
+  console.log('testB');
   chrome.storage.sync.set({ blockItems: [] }, function() {});
 }
 
 function resetSettings() {
+  console.log('testS');
   chrome.storage.sync.set({ settings: defaultSettings }, function() {});
 }
 
 function resetPauseTime() {
+  console.log('testP');
   chrome.storage.sync.set({ pauseTime: '' }, function() {});
 }

@@ -131,7 +131,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Advanced
   chrome.storage.sync.get('settings', function(result) {
-    var settings = result.settings;
+    var settings = checkSettings(result.settings);
     var advancedWrap = document.getElementById('advanced-settings-wrap');
     var content = '';
     let form = document.createElement('form');
