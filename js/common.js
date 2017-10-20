@@ -22,7 +22,8 @@ var blockImages = {
   'kanye': 'kanye.webp',
   'bernie': 'bernie.webp',
   'oprah': 'oprah.webp',
-  'hill': 'hill.webp'
+  'hill': 'hill.webp',
+  'tswift': 'tswift.webp'
 };
 
 var pauseTimes = [
