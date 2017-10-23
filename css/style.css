@@ -143,10 +143,17 @@ html {
   text-align: center;
 }
 
+.settings-image-wrap:after {
+  content: ' ';
+  display: block;
+  clear: both;
+}
+
 .settings-image-wrap label {
   display: inline-block;
   vertical-align: top;
   margin-bottom: 1rem;
+  width: 100px;
 }
 
 .settings-image-wrap label:not(:first-of-type) {
@@ -154,13 +161,13 @@ html {
 }
 
 .settings-image-wrap input {
-  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
 }
 
 .settings-image-wrap img {
   display: inline-block;
   vertical-align: top;
-  max-width: 100px;
+  width: 100%;
 }
 
 .not-now-advanced-save-wrap {
@@ -537,6 +544,24 @@ p a:visited {
 }
 
 @media screen and (max-width: 899px) {
+
+  .settings-image-wrap label {
+    float: left;
+    display: block;
+    width: 48%;
+  }
+
+  .settings-image-wrap label:not(:first-of-type) {
+    margin-left: 0px;
+  }
+
+  .settings-image-wrap label:nth-child(2n) {
+    margin-left: 4%;
+  }
+
+  .settings-image-wrap label:nth-child(2n+1) {
+    clear: both;
+  }
 
   .not-now-settings {
     max-width: 100%;

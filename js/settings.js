@@ -152,11 +152,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     content += '<label><input type="radio" name="image" value="none"';
     if (settings.blockImage == 'none') { content += ' checked'; }
-    content += '>None</label>';
+    content += '><div>None</div></label>';
 
     content += '<label><input type="radio" name="image" value="random"';
     if (settings.blockImage == 'random') { content += ' checked'; }
-    content += '>Random</label>';
+    content += '><div>Random</div></label>';
 
     for (var key in blockImages) {
       content += '<label><input type="radio" name="image" value="' + key + '"';
