@@ -99,7 +99,6 @@ function displayModal(criteria) {
           img[0].classList += ' active';
         }
 
-        document.head.innerHTML = '';
         document.head.innerHTML = '<title>Blocked</title>';
         document.body.className = '';
         document.body.innerHTML = '';
